@@ -30,11 +30,12 @@ const Brainstorming = () => {
     };
 
     const handleAddIdea = async () => {
+        /*
         if (newIdea.trim()) { // Verifica que la idea no esté vacía después de eliminar espacios en blanco
             await axios.post('http://django-tester.onrender.com/ideas', { idea: newIdea }); // Envía la nueva idea al servidor
             setIdeas([...ideas, newIdea]); // Actualiza 'ideas' con la nueva idea
             setNewIdea(''); // Limpia el textarea
-        }
+        }*/
     };
 
     // Abre el modal para una idea específica
@@ -53,6 +54,7 @@ const Brainstorming = () => {
 
     // Maneja la acción de aceptar o rechazar la idea
     const handleAction = async () => {
+        /*
         if (selectedUser && action) { // Verifica que un usuario y una acción estén seleccionados
             const endpoint = action === 'accept' ? 'accept' : 'reject'; // Determina el endpoint en función de la acción
             await axios.post(`http://django-tester.onrender.com/ideas/${endpoint}`, { // Envía la idea y el usuario al servidor
@@ -61,7 +63,7 @@ const Brainstorming = () => {
             });
             setIdeas(ideas.filter(i => i !== selectedIdea)); // Elimina la idea aceptada o rechazada del estado ideas
             closeModal(); // Cierra el modal
-        }
+        }*/
     };
 
     return (

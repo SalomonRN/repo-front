@@ -21,7 +21,7 @@ const ProposalDetail = () => {
   // Obtener los datos de las propuestas
   useEffect(() => {
     const fetchProposals = async () => {
-      try {
+      /*try {
         const response = await axios.get('django-tester.onrender.com/content_proposal/');
         const proposal = response.data.find(proposal => proposal.id === parseInt(id)); // Busca la propuesta con el id proporcionado
         console.log('Propuesta seleccionada:', proposal); // Inspecciona la estructura del objeto aquí
@@ -30,7 +30,7 @@ const ProposalDetail = () => {
         console.error('Error obteniendo las propuestas:', error);
       } finally {
         setLoading(false);
-      }
+      }*/
     };
 
     fetchProposals();

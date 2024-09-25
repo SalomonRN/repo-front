@@ -71,6 +71,7 @@ function Calendar() {
     };
 
     const handleSaveEvent = () => {
+        /*
         if (selectedEvent) {
             const updatedEvent = {
                 id: selectedEvent.id,
@@ -103,7 +104,7 @@ function Calendar() {
                     closeModal();
                 })
                 .catch(error => console.error('Error al crear el evento:', error));
-        }
+        }*/
     };
 
     const handleEventClick = (info) => {
