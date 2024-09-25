@@ -1,5 +1,4 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { authContext } from '../context/AuthContext';
 import { useNavigate } from "react-router-dom";
 import '../css/login.css';
 import '../css/header.css';
@@ -7,7 +6,7 @@ import imagen from '../images/logologin.png';
 
 const Login = () => {
 
-    const { login } = useContext(authContext);
+    const { login } = useContext("authContext");
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({

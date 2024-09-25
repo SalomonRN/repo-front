@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { authContext } from "../context/AuthContext";
 import '../css/register.css';
 import '../css/header.css';
 import imagen from '../images/logologin.png';
@@ -8,7 +7,7 @@ import imagen from '../images/logologin.png';
 const Register = () => {
 
     const navigate = useNavigate();
-    const {login} = useContext(authContext);
+    const {login} = useContext("authContext");
     const [formData, setFormData] = useState({
         username: '',
         email: '',
