@@ -170,14 +170,14 @@ const ProposalDetail = () => {
             const token = localStorage.getItem('token');
             const formData = new FormData();
             formData.append('id', selectedProposal.id);
-            formData.append('status', newStatus);  // Estado seleccionado
-
+            formData.append('status', newStatus);
+    
             if (newStatus === 'RJ' || newStatus === 'MC') {
                 formData.append('reason', reason);
                 await handleAddComment(reason);
                 setReason('');
             }
-
+    
             // Cambiar el estado de la propuesta
             const response = await fetch(`${URL}/content_proposal/change_status/`, {
                 method: 'POST',
@@ -186,15 +186,43 @@ const ProposalDetail = () => {
                 },
                 body: formData,
             });
-
+    
             if (response.ok) {
                 const result = await response.json();
+    
+                // Mostrar mensaje de éxito
                 Swal.fire({
                     title: 'Éxito',
                     text: `Estado cambiado correctamente a: ${newStatus}`,
                     icon: 'success'
                 });
-                //alert(`Estado cambiado correctamente a: ${newStatus}.`);
+    
+                // Publicar si el estado es "AP" y result.publish es true
+                if (newStatus === "AP" && result.publish === true) {
+                    const publishResponse = await fetch(`${URL}/publish/${selectedProposal.id}`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Token ${token}`,
+                        },
+                    });
+    
+                    if (publishResponse.ok) {
+                        const publishResult = await publishResponse.json();
+                        Swal.fire({
+                            title: 'Publicación exitosa',
+                            text: `Propuesta publicada correctamente: ${publishResult.message}`,
+                            icon: 'success'
+                        });
+                    } else {
+                        const publishErrorData = await publishResponse.json();
+                        Swal.fire({
+                            title: 'Error de publicación',
+                            text: `Error al publicar la propuesta: ${JSON.stringify(publishErrorData)}`,
+                            icon: 'error'
+                        });
+                    }
+                }
+    
                 setShowStatusModal(false);
             } else {
                 const errorData = await response.json();
@@ -203,7 +231,6 @@ const ProposalDetail = () => {
                     text: `Error al cambiar el estado`,
                     icon: 'error'
                 });
-                //alert(`Error al cambiar el estado: ${JSON.stringify(errorData)}`);
             }
         } catch (error) {
             Swal.fire({
@@ -211,9 +238,9 @@ const ProposalDetail = () => {
                 text: `Error al cambiar el estado de la propuesta`,
                 icon: 'error'
             });
-            //alert('Error al cambiar el estado de la propuesta');
         }
     };
+    
 
     const renderFileIframes = (fileIds) => {
         if (!fileIds) return null;
