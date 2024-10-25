@@ -3,10 +3,11 @@ import '../css/linkAccount.css';
 import Header from "./header";
 import { useLocation, useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
+import URL from "./url";
 
 const LinkAccount = () => {
 
-    const URL = 'https://django-tester.onrender.com';
+
 
     const location = useLocation();
     const navigate = useNavigate();

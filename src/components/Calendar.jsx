@@ -7,6 +7,7 @@ import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
 import '../css/calendar.css';
 import Header from './header';
+import URL from "./url";
 
 Modal.setAppElement('#root');
 
@@ -21,7 +22,7 @@ function Calendar() {
         setMenuHeight(menuOpen ? '0px' : '400px');
     };
 
-    const URL = 'https://django-tester.onrender.com';
+
 
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [viewEventModalIsOpen, setViewEventModalIsOpen] = useState(false);
@@ -34,6 +35,8 @@ function Calendar() {
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
+    const [status, setStatus] = useState("");
+    const [acceptedBy, setAcceptedBy] = useState("");
 
 
     useEffect(() => {
@@ -149,10 +152,12 @@ function Calendar() {
             })
             .then(data => {
                 console.log("Evento creado correctamente:", data);
+                alert('Evento creado con éxito')
                 // Agregar el nuevo evento al estado
                 setEvents(prevEvents => [...prevEvents, data]); // Esto debería funcionar para mostrarlo en el calendario
+                fetchEvents();
                 closeModal();
-                setSuccessMessage('Evento creado exitosamente.');
+
             })
             .catch(error => {
                 console.error("Error al crear el evento:", error);
@@ -267,6 +272,46 @@ function Calendar() {
         );
     };
 
+    const handleMarkAsCompleted = async () => {
+        if (!selectedEvent) {
+            console.error('No hay evento seleccionado.');
+            return;
+        }
+    
+        console.log('maldito id:', selectedEvent.id); 
+    
+        const formData = new FormData();
+        formData.append('status', 1); 
+        formData.append('id', selectedEvent.id); 
+    
+        try {
+            const response = await fetch(`${URL}/project_management/change-event-status/`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Token ${token}`,
+                },
+                body: formData,
+            });
+    
+            if (response.ok) {
+                alert('Evento marcado como completado.');
+                closeViewEventModal();
+                fetchEvents(); 
+            } else {
+                const errorData = await response.json();
+                console.error('Error al marcar el evento como completado:', errorData);
+                setError(errorData.message || 'No se pudo marcar el evento como completado.');
+                
+            }
+        } catch (error) {
+            console.error('Error en la solicitud:', error);
+            setError('Error en la solicitud al marcar el evento como completado.');
+        }
+    };
+    
+    
+
+
     return (
         <div className={`full-container ${menuOpen ? 'shifted' : ''}`} style={{ marginTop: menuHeight }}>
             <div className="header-container">
@@ -330,7 +375,26 @@ function Calendar() {
                             <p><strong>Título:</strong> {selectedEvent.title}</p>
                             <p><strong>Descripción:</strong> {selectedEvent.description}</p>
                             <p><strong>Fecha:</strong> {selectedEvent.date}</p>
-                            <p><strong>Color:</strong> {selectedEvent.color}</p>
+                            <p><strong>Creado por:</strong> {selectedEvent.created_by}</p>
+
+                            <div>
+                                <p><strong>Estado actual:</strong> {selectedEvent.status}</p>
+                                {isAdmin && (
+                                    selectedEvent.status ? ( 
+                                        <button className='btn-complete' disabled>
+                                            Completado
+                                        </button>
+                                    ) : (
+                                        <button className='btn-complete' onClick={handleMarkAsCompleted}>
+                                            Marcar como realizado
+                                        </button>
+                                    )
+                                )}
+                                {acceptedBy && (
+                                    <p><strong>Cambiado por:</strong> {acceptedBy}</p>
+                                )}
+                            </div>
+
                             <div>
                                 {isAdmin && ( // Solo mostrar botones si es admin
                                     <>

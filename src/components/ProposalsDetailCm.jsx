@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 import '../css/proposalDetailCm.css';
 import Header from './header';
+import URL from './url';
 
 const ProposalDetailCm = () => {
     const navigate = useNavigate();
@@ -13,7 +14,7 @@ const ProposalDetailCm = () => {
         setMenuHeight(menuOpen ? '0px' : '300px');
     };
 
-    const URL = 'https://django-tester.onrender.com';
+    
     
     const { id } = useParams();
     const [loading, setLoading] = useState(true);
@@ -245,6 +246,25 @@ const ProposalDetailCm = () => {
         setIsEditing(false);
     };
 
+    const renderFileIframes = (fileIds) => {
+        if (!fileIds) return null;
+
+        const ids = fileIds.split(',');
+        //console.log('Rendering Iframes for IDs:', ids); // Agrega este log para verificar
+
+        return ids.map((fileId) => (
+            <iframe
+                key={fileId}
+                src={`https://drive.google.com/file/d/${fileId}/preview`}
+                width="440"
+                height="280"
+                allow="autoplay"
+                style={{ marginBottom: '20px' }}
+                title={`Archivo de Google Drive ${fileId}`}
+            />
+        ));
+    };
+
     if (loading) {
         return <p>Cargando...</p>;
     }
@@ -273,6 +293,15 @@ const ProposalDetailCm = () => {
                     <p><strong>Copy:</strong> {selectedProposal.copy || 'No hay copy'}</p>
                     <p><strong>Creado por:</strong> {selectedProposal.proposed_by || 'Desconocido'}</p>
                     <p><strong>Fecha de actualización:</strong> {selectedProposal.updated_at || 'Desconocida'}</p>
+
+                    {/* drive */}
+                    <div className="proposal-files-ad">
+                        <center>
+                        <h2 className='vid-title'>Archivos Adjuntos</h2>
+                        {renderFileIframes(selectedProposal.url)}
+                        </center>
+                    </div>
+
                 </div>
 
                 <div className="proposal-comments-d">
@@ -361,15 +390,6 @@ const ProposalDetailCm = () => {
                                 multiple
                                 onChange={handleFilesChange}
                             /><br />
-                            <br /><label>Propuesto por:</label>
-                            <select
-                                className='select-social-d'
-                                value={editedProposal.edited_by || ''}
-                                onChange={handleProposedByChange} required>
-                                <option value="">---------</option>
-                                <option value="wavy">wavy</option>
-                                <option value="salo">salo</option>
-                            </select>
 
                             <br />
                             <button className='btn-save-d' type="button" onClick={handleEditProposal}>Guardar Cambios</button>

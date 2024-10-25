@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../css/proposalsList.css';
 import '../css/header.css';
 import Header from "./header";
+import URL from "./url";
 
 const ProposalsListCm = () => {
     const [proposals, setProposals] = useState([]);
@@ -14,7 +15,7 @@ const ProposalsListCm = () => {
         setMenuHeight(menuOpen ? '0px' : '300px'); 
     };
 
-    const URL = 'https://django-tester.onrender.com';
+
 
     // Función para obtener las propuestas
     const fetchContentProposal = async () => {

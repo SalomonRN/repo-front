@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import '../css/ideasArchive.css';
 import Header from './header';
+import URL from "./url";
 
 const IdeasArchive = () => {
     const [acceptedIdeas, setAcceptedIdeas] = useState([]);  // Estado para ideas aceptadas
@@ -9,7 +10,7 @@ const IdeasArchive = () => {
     const token = localStorage.getItem('token');
     const navigate = useNavigate();
 
-    const URL = 'https://django-tester.onrender.com';
+
 
     const [menuHeight, setMenuHeight] = useState('0px'); 
     const [menuOpen, setMenuOpen] = useState(false);

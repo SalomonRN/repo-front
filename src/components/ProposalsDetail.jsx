@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../css/proposalDetail.css';
 import Header from './header';
+import URL from './url';
 
 const ProposalDetail = () => {
     const navigate = useNavigate();
@@ -12,7 +13,7 @@ const ProposalDetail = () => {
         setMenuHeight(menuOpen ? '0px' : '300px');
     };
 
-    const URL = 'https://django-tester.onrender.com';
+    
 
     const { id } = useParams();
     const [loading, setLoading] = useState(true);
@@ -163,6 +164,26 @@ const ProposalDetail = () => {
         }
     };
 
+    const renderFileIframes = (fileIds) => {
+        if (!fileIds) return null;
+
+        const ids = fileIds.split(',');
+        //console.log('Rendering Iframes for IDs:', ids); // Agrega este log para verificar
+
+        return ids.map((fileId) => (
+            <iframe
+                key={fileId}
+                src={`https://drive.google.com/file/d/${fileId}/preview`}
+                width="440"
+                height="280"
+                allow="autoplay"
+                style={{ marginBottom: '20px' }}
+                title={`Archivo de Google Drive ${fileId}`}
+            />
+        ));
+    };
+
+
     if (loading) {
         return <p>Cargando...</p>;
     }
@@ -185,6 +206,15 @@ const ProposalDetail = () => {
                     <p><strong>Copy:</strong> {selectedProposal.copy || 'No hay copy'}</p>
                     <p><strong>Creado por:</strong> {selectedProposal.proposed_by || 'Desconocido'}</p>
                     <p><strong>Fecha de actualización:</strong> {selectedProposal.updated_at || 'Desconocida'}</p>
+
+                    {/* drive */}
+                    <div className="proposal-files-ad">
+                        <center>
+                        <h2 className='vid-title'>Archivos Adjuntos</h2>
+                        {renderFileIframes(selectedProposal.url)}
+                        </center>
+                    </div>
+
                 </div>
 
                 <div className="proposal-comments-ad">
@@ -205,9 +235,9 @@ const ProposalDetail = () => {
 
                     <form
                         onSubmit={(e) => {
-                            e.preventDefault(); 
-                            handleAddComment(newComment); 
-                            setNewComment(''); 
+                            e.preventDefault();
+                            handleAddComment(newComment);
+                            setNewComment('');
                         }}
                     >
                         <textarea

@@ -238,21 +238,13 @@ a {
     color: rgba(99, 99, 99, 0.795);
 }
 
-.modal-view-event button:nth-child(2) {
-    background-color: #a3180e;
-    color: white;
-}
 
-.modal-view-event button:nth-child(2):hover {
-    background-color: #630b05;
-}
-
-.modal-view-event button:last-child {
+.cerrar {
     background-color: #07A193;
     color: white;
 }
 
-.modal-view-event button:last-child:hover {
+.cerrar:hover {
     background-color: #074b45;
 }
 
@@ -285,6 +277,18 @@ a {
     font-size: 20px;
 }
 
+.btn-complete{
+    background: rgb(224, 143, 67);
+    color: #000;
+    transition: backgroung-color .3s;
+}
+
+.btn-complete:hover{
+    background: rgb(138, 84, 34);
+
+}
+
+
 .modal-confirm-delete button {
     width: 100%;
     padding: 10px;
@@ -294,6 +298,13 @@ a {
     font-family: 'JerseyR', sans-serif;
     font-size: 20px; /* Ajustado para pantallas pequeñas */
     font-weight: lighter;
+    margin-bottom: 10px;
+    background: #ffffff;
+    transition: background-color 0.3s;
+}
+
+.modal-confirm-delete button:hover{
+background: #a3a3a3;
 }
 
 .modal-confirm-delete .confirm {
@@ -305,12 +316,12 @@ a {
     background-color: #0a2906;
 }
 
-.modal-confirm-delete .cancel {
+.eliminar {
     background-color: #a3180e;
     color: white;
 }
 
-.modal-confirm-delete .cancel:hover {
+.eliminar:hover {
     background-color: #630b05;
 }
 

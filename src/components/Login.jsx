@@ -4,10 +4,11 @@ import axios from 'axios'; // Importar axios para hacer solicitudes
 import { AuthContext } from '../context/AuthContext'; // Importar el contexto
 import '../css/login.css';
 import imagen from '../images/logologin.png';
+import URL from "./url";
 
 const Login = () => {
 
-    const URL = 'https://django-tester.onrender.com';
+
 
     const navigate = useNavigate();
     const { login } = useContext(AuthContext); // Usar login del contexto

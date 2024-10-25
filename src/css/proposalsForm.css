@@ -44,7 +44,7 @@ label {
     font-size: 15px;
 }
 
-.input-form-p, .select-form-p, .copy, .description-form {
+.input-form-p, .select-form-p, .copy, .description-form, .input-btn-f {
     width: 100%; 
     padding: 8px; 
     border: 1px solid rgba(43, 43, 43, 1);
@@ -53,6 +53,7 @@ label {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-size: 15px;
     background-color: #fff;
+    
 }
 
 textarea {

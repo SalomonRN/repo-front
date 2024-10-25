@@ -5,6 +5,7 @@ import Select from 'react-select';
 import '../css/proposalsForm.css';
 import Header from './header';
 import { AuthContext } from "../context/AuthContext";
+import URL from "./url";
 
 const ProposalsForms = () => {
     const navigate = useNavigate();
@@ -16,7 +17,6 @@ const ProposalsForms = () => {
         setMenuHeight(menuOpen ? '0px' : '400px');
     };
 
-    const URL = 'https://django-tester.onrender.com';
 
     const [title, setTitle] = useState('');
     const [type, setType] = useState('');
@@ -206,17 +206,17 @@ const ProposalsForms = () => {
                                     <label>Descripción:</label>
                                     <textarea className="description-form" value={description} onChange={handleDescriptionChange} required ></textarea>
                                 </div>
-                                <div className="pb-container">
+                                {/*<div className="pb-container">
                                     <label>Propuesto por:</label>
                                     <select value={proposedBy} onChange={handleProposedByChange} required>
                                         <option value="">---------</option>
                                         <option value="wavy">wavy</option>
                                         <option value="salo">salo</option>
                                     </select>
-                                </div>
+                                </div>*/}
                                 <div className="file-container">
                                     <label>Archivos:</label>
-                                    <input type="file" multiple onChange={handleFilesChange} />
+                                    <input className='input-btn-f' type="file" multiple onChange={handleFilesChange} />
                                 </div>
                                 <button className="btn-pform" type="submit">Enviar Propuesta</button>
                             </center>

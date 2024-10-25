@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../css/proposalsList.css';
 import Header from './header';
+import URL from "./url";
 
 const ProposalsList = () => {
     const [proposals, setProposals] = useState([]);
@@ -14,7 +15,7 @@ const ProposalsList = () => {
         setMenuHeight(menuOpen ? '0px' : '300px');
     };
 
-    const URL = 'https://django-tester.onrender.com';
+
 
     useEffect(() => {
         // Función asincrónica para obtener las propuestas de la API con token de autenticación
