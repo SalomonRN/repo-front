@@ -1,273 +1,173 @@
 import React, { useState, useEffect } from "react";
 import '../css/linkAccount.css';
-import Header from "./header";
-import { useLocation, useNavigate } from "react-router-dom";
-import Swal from 'sweetalert2';
-import URL from "./url";
+import { useLocation, useNavigate } from "react-router-dom"; // Importar useNavigate
+import Swal from 'sweetalert2'; // Importar SweetAlert
 
 const LinkAccount = () => {
-
-
-
     const location = useLocation();
-    const navigate = useNavigate();
+    const navigate = useNavigate(); // Para manejar la redirección
     const [error, setError] = useState(null);
-    const [token, setToken] = useState(localStorage.getItem('token'));
-
-    // Estados para el manejo de cuentas vinculadas
-    const [isGoogleLinked, setIsGoogleLinked] = useState(localStorage.getItem('isGoogleLinked') === 'true');
-    const [isMetaLinked, setIsMetaLinked] = useState(localStorage.getItem('isMetaLinked') === 'true');
+    const [hasCheckedGoogle, setHasCheckedGoogle] = useState(false);
+    const [hasCheckedMeta, setHasCheckedMeta] = useState(false);
+    const [token, setToken] = useState(localStorage.getItem('token')); // Obtener el token del localStorage
+    const [isGoogleLinked, setIsGoogleLinked] = useState(localStorage.getItem('isGoogleLinked') === 'true'); // Estado de vinculación de Google
+    const [isMetaLinked, setIsMetaLinked] = useState(localStorage.getItem('isMetaLinked') === 'true'); // Estado de vinculación de Meta
 
     useEffect(() => {
+        // Verificar el token al cargar el componente
         if (!token) {
-            Swal.fire({
-                title: 'Error',
-                text: `No se encontró el token de autenticación. Por favor, inicia sesión nuevamente`,
-                icon: 'error'
-            });
-            //setError('No se encontró el token de autenticación. Por favor, inicia sesión nuevamente.');
-            return;
+            console.error('No se encontró el token de autenticación');
+            setError('No se encontró el token de autenticación. Por favor, inicia sesión nuevamente.');
+            return; // Salir si no hay token
         }
 
-        // Procesar la URL de callback
+        // Si hay parámetros en la URL, llamar a la función de callback para Google
         const queryString = location.search;
-        console.log("Query:", queryString);
+        if (!hasCheckedGoogle && queryString) {
+            const params = new URLSearchParams(queryString);
+            const code = params.get('code');
+            const state = params.get('state');
 
-        if (queryString.includes('code=')) {
-            if (queryString.includes('state=google')) {
-                console.log("callback gugul");
-                handleOauthCallbackGoogle(queryString);
-            } else if (queryString.includes('state=meta')) {
-                handleOauthCallbackMeta(queryString);
+            // Solo proceder si existen los parámetros de Google en la URL
+            if (code && state) {
+                handleOauthCallback(queryString, 'google'); // Llama a la función de callback para Google
+                setHasCheckedGoogle(true); // Marca que ya se ha ejecutado el callback de Google
             }
-        } else {
-            console.log("No se encontró un código en la query string.");
-
         }
-    }, [location.search, token]);
+
+        // Si hay parámetros en la URL, llamar a la función de callback para Meta
+        if (!hasCheckedMeta && queryString) {
+            const params = new URLSearchParams(queryString);
+            const code = params.get('code');
+            const state = params.get('state');
+
+            // Solo proceder si existen los parámetros de Meta en la URL
+            if (code && state) {
+                handleOauthMetaCallback(queryString); // Llama a la función de callback para Meta
+                setHasCheckedMeta(true); // Marca que ya se ha ejecutado el callback de Meta
+            }
+        }
+    }, [hasCheckedGoogle, hasCheckedMeta, location.search, token]); // Dependencias de useEffect
 
     const handleLinkGoogle = async () => {
         try {
-            const response = await fetch(`${URL}/auth/google/`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Token ${token}`,
-                    'Content-Type': 'application/json',
-                },
-            });
-
+            const response = await fetch('https://django-tester.onrender.com/auth/google/');
             const data = await response.json();
-            console.log("URL:", data);
+            console.log('Respuesta del servidor (link):', data);
+
             if (data) {
-                window.location.href = data; // Redirige a la autenticación de Google
+                window.location.href = data; // Redirige a la URL de autenticación de Google
             } else {
-                Swal.fire({
-                    title: 'Error',
-                    text: `Error al obtener la URL de autenticación de Google`,
-                    icon: 'error'
-                });
-                //setError('Error al obtener la URL de autenticación de Google');
+                setError('Error al obtener la URL de autenticación de Google');
             }
         } catch (error) {
-            Swal.fire({
-                title: 'Error',
-                text: `Error al iniciar el proceso de vinculación con Google`,
-                icon: 'error'
-            });
-            //setError('Error al iniciar el proceso de vinculación con Google');
+            setError('Error al iniciar el proceso de vinculación con Google');
         }
     };
 
-    const handleLinkMeta = async () => {
-        window.location.href = 'https://www.facebook.com/v17.0/dialog/oauth?client_id=1360414881319473&redirect_uri=https%3A%2F%2Frepo-front-o1hw.onrender.com%2Fauth%2Fmeta%2F&scope=email%2Cpages_manage_cta%2Cpages_manage_instant_articles%2Cpages_manage_engagement%2Cpages_manage_posts%2Cpages_read_engagement%2Cpublish_video%2Cinstagram_basic%2Cinstagram_shopping_tag_products%2Cinstagram_content_publish&response_type=code&state=meta'; // Agregar state
+    const handleLinkMeta = () => {
+        const metaAuthUrl = 'https://www.facebook.com/v17.0/dialog/oauth?client_id=1360414881319473&redirect_uri=https%3A%2F%2Frepo-front-o1hw.onrender.com%2Fauth%2Fmeta%2F&scope=email%2Cpages_manage_cta%2Cpages_manage_instant_articles%2Cpages_manage_engagement%2Cpages_manage_posts%2Cpages_read_engagement%2Cpublish_video%2Cinstagram_basic%2Cinstagram_shopping_tag_products%2Cinstagram_content_publish&response_type=code&ret=login&fbapp_pres=0&logger_id=41cf9ed8-b228-4b0f-af1e-a2806bd3a321&tp=unspecified&cbt=1725916819679&ext=1725920435&hash=AeZAyJGld3iQbPmNgr4';
+
+        // Redirigir a la URL de autenticación de Meta
+        window.location.href = metaAuthUrl;
     };
 
-    const handleOauthCallbackGoogle = async (queryString) => {
-        const url = `${URL}/auth/google/oauth2callback${queryString}`;
-        console.log("Google Callback URL:", url);
-        
+    const handleOauthMetaCallback = async (queryString) => {
+        console.log('Procesando callback de Meta con queryString:', queryString);
+
+        const url = `https://django-tester.onrender.com/auth/meta/${queryString}`;
+
         try {
             const response = await fetch(url, {
                 method: 'GET',
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Token ${token}`, // Agregar el token a la cabecera
                     'Content-Type': 'application/json',
                 },
             });
 
             if (response.ok) {
-                const responseData = await response.json();
-                console.log("Google Callback Response Data:", responseData);
+                const result = await response.json();
+                console.log('Resultado del servidor Meta:', result);
+                setIsMetaLinked(true); // Cambiar estado a vinculado para Meta
+                localStorage.setItem('isMetaLinked', 'true'); // Guardar en localStorage
 
-                setIsGoogleLinked(true);
-                localStorage.setItem('isGoogleLinked', 'true');
+                // Usar SweetAlert para mostrar la vinculación exitosa
                 Swal.fire({
                     title: 'Vinculación exitosa!',
-                    text: 'La cuenta de Google ha sido vinculada',
+                    text: 'La cuenta de Meta ha sido vinculada con éxito',
                     icon: 'success',
+                    confirmButtonText: 'Aceptar'
                 }).then(() => {
-                    console.log("Redirigiendo a /link_account...");
-                    navigate('/link_account'); // Redirigir después del SweetAlert
+                    navigate('/link_account'); // Redirigir al componente LinkAccount
                 });
             } else {
                 const errorData = await response.json();
-                console.log("Error en Google Callback:", errorData);
-                Swal.fire({
-                    title: 'Error',
-                    text: `Error al procesar el callback de Google`,
-                    icon: 'error'
-                });
+                setError(`Error al procesar el callback de Meta: ${errorData.message}`);
             }
         } catch (error) {
-            console.error("Error en la solicitud al servidor en Google Callback:", error);
-            Swal.fire({
-                title: 'Error',
-                text: `Error en la solicitud al servidor`,
-                icon: 'error'
-            });
+            setError('Error en la solicitud al servidor');
         }
     };
 
-    const handleOauthCallbackMeta = async (queryString) => {
-        const url = `${URL}/auth/meta/${queryString}`;
+    const handleOauthCallback = async (queryString) => {
+        console.log('Procesando callback con queryString:', queryString);
+
+        const url = `https://django-tester.onrender.com/auth/google/oauth2callback${queryString}`;
+
         try {
             const response = await fetch(url, {
                 method: 'GET',
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Token ${token}`, // Agregar el token a la cabecera
                     'Content-Type': 'application/json',
                 },
             });
-    
+
             if (response.ok) {
-                const responseData = await response.json(); 
-                console.log(JSON.stringify(responseData, null, 2)); 
-    
-                setIsMetaLinked(true);
-                localStorage.setItem('isMetaLinked', 'true');
+                const result = await response.json();
+                console.log('Resultado del servidor:', result);
+                setIsGoogleLinked(true); // Cambiar estado a vinculado para Google
+                localStorage.setItem('isGoogleLinked', 'true'); // Guardar en localStorage
+
+                // Usar SweetAlert para mostrar la vinculación exitosa
                 Swal.fire({
                     title: 'Vinculación exitosa!',
-                    text: 'La cuenta de Meta ha sido vinculada',
-                    icon: 'success',
-                }).then(() => navigate('/link_account')); 
-            } else {
-                const errorData = await response.json();
-                Swal.fire({
-                    title: 'Error',
-                    text: `Error al procesar el callback de Meta`,
-                    icon: 'error'
-                });
-                //setError(`Error al procesar el callback de Meta: ${errorData.message}`);
-                console.log(`Error al procesar el callback de Meta: ${JSON.stringify(errorData, null, 2)}`); 
-            }
-        } catch (error) {
-            Swal.fire({
-                title: 'Error',
-                text: `Error en la solicitud al servidor`,
-                icon: 'error'
-            });
-            //setError('Error en la solicitud al servidor');
-            console.log('Error en la solicitud al servidor:', error); 
-        }
-    };
-
-    const handleUnlinkGoogle = async () => {
-        try {
-            const response = await fetch(`${URL}/auth/google/unlink`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Token ${token}`,
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            if (response.ok) {
-                localStorage.removeItem('isGoogleLinked');
-                setIsGoogleLinked(false);
-                Swal.fire({
-                    title: 'Desvinculación exitosa!',
-                    text: 'La cuenta de Google ha sido desvinculada con éxito',
+                    text: 'La cuenta de Google ha sido vinculada con éxito',
                     icon: 'success',
                     confirmButtonText: 'Aceptar'
-                }).then(() => navigate('/link_account'));
+                }).then(() => {
+                    navigate('/link_account'); // Redirigir al componente LinkAccount
+                });
             } else {
                 const errorData = await response.json();
-                Swal.fire({
-                    title: 'Error',
-                    text: `Error al desvincular la cuenta de Google`,
-                    icon: 'error'
-                });
-                //setError(`Error al desvincular la cuenta de Google: ${errorData.message}`);
+                setError(`Error al procesar el callback de Google: ${errorData.message}`);
             }
         } catch (error) {
-            Swal.fire({
-                title: 'Error',
-                text: `Error al procesar la solicitud de desvinculación`,
-                icon: 'error'
-            });
-            //setError('Error al procesar la solicitud de desvinculación');
-        }
-    };
-
-const handleUnlinkMeta = async () => {
-        try {
-            const response = await fetch(`${URL}/auth/meta/unlink`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Token ${token}`,
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            if (response.ok) {
-                localStorage.removeItem('isMetaLinked');
-                setIsMetaLinked(false);
-                Swal.fire({
-                    title: 'Desvinculación exitosa!',
-                    text: 'La cuenta de Meta ha sido desvinculada con éxito',
-                    icon: 'success',
-                    confirmButtonText: 'Aceptar'
-                }).then(() => navigate('/link_account'));
-            } else {
-                const errorData = await response.json();
-                Swal.fire({
-                    title: 'Error',
-                    text: `Error al desvincular la cuenta de Meta`,
-                    icon: 'error'
-                });
-                //setError(`Error al desvincular la cuenta de Meta: ${errorData.message}`);
-            }
-        } catch (error) {
-            Swal.fire({
-                title: 'Error',
-                text: `Error al procesar la solicitud de desvinculación`,
-                icon: 'error'
-            });
-            //setError('Error al procesar la solicitud de desvinculación');
+            setError('Error en la solicitud al servidor');
         }
     };
 
     useEffect(() => {
-        setIsGoogleLinked(localStorage.getItem('isGoogleLinked') === 'true');
-        setIsMetaLinked(localStorage.getItem('isMetaLinked') === 'true');
-    }, []);
+        // Actualizar el estado local basado en localStorage
+        const storedIsGoogleLinked = localStorage.getItem('isGoogleLinked') === 'true';
+        const storedIsMetaLinked = localStorage.getItem('isMetaLinked') === 'true';
+        setIsGoogleLinked(storedIsGoogleLinked);
+        setIsMetaLinked(storedIsMetaLinked);
+    }, []); // Solo se ejecuta una vez al montar el componente
 
     return (
         <div className="link-container">
-            {/*<Header /> */}
             <h1>Vinculación de cuentas</h1>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <center>
-                {isGoogleLinked ? (
-                    <button onClick={handleUnlinkGoogle}>Desvincular cuenta de Google</button>
-                ) : (
-                    <button onClick={handleLinkGoogle}>Iniciar Vinculación con Google</button>
-                )}
-                {isMetaLinked ? (
-                    <button onClick={handleUnlinkMeta}>Desvincular cuenta de Meta</button>
-                ) : (
-                    <button onClick={handleLinkMeta}>Iniciar Vinculación con Meta</button>
-                )}
+                <button onClick={handleLinkGoogle} disabled={isGoogleLinked}>
+                    {isGoogleLinked ? "Cuenta de Google Vinculada" : "Iniciar Vinculación con Google"}
+                </button>
+                <br />
+                <button onClick={handleLinkMeta} disabled={isMetaLinked}>
+                    {isMetaLinked ? "Cuenta de Meta Vinculada" : "Iniciar Vinculación con Meta"}
+                </button>
             </center>
         </div>
     );
