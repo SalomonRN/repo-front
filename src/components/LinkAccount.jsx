@@ -52,12 +52,18 @@ const LinkAccount = () => {
 
     const handleLinkGoogle = async () => {
         try {
-            const response = await fetch(`${URL}/auth/google/`);
-            const data = await response.json();
-            console.log('Respuesta del servidor (link):', data);
+            const response = await fetch(`${URL}/auth/google/`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Token ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
 
+            const data = await response.json();
+            console.log('url:', data)
             if (data) {
-                window.location.href = data; // Redirige a la URL de autenticación de Google
+                window.location.href = data; // Redirige a la autenticación de Google
             } else {
                 setError('Error al obtener la URL de autenticación de Google');
             }
@@ -65,6 +71,7 @@ const LinkAccount = () => {
             setError('Error al iniciar el proceso de vinculación con Google');
         }
     };
+    
 
     const handleLinkMeta = () => {
         const metaAuthUrl = 'https://www.facebook.com/v17.0/dialog/oauth?client_id=1360414881319473&redirect_uri=https%3A%2F%2Frepo-front-o1hw.onrender.com%2Fauth%2Fmeta%2F&scope=email%2Cpages_manage_cta%2Cpages_manage_instant_articles%2Cpages_manage_engagement%2Cpages_manage_posts%2Cpages_read_engagement%2Cpublish_video%2Cinstagram_basic%2Cinstagram_shopping_tag_products%2Cinstagram_content_publish&response_type=code&ret=login&fbapp_pres=0&logger_id=41cf9ed8-b228-4b0f-af1e-a2806bd3a321&tp=unspecified&cbt=1725916819679&ext=1725920435&hash=AeZAyJGld3iQbPmNgr4';
