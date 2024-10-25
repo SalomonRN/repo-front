@@ -126,7 +126,7 @@ const LinkAccount = () => {
             const response = await fetch(url, {
                 method: 'GET',
                 headers: {
-                    'Authorization': `Token ${token}`, // Agregar el token a la cabecera
+                    'Authorization': `Token ${token}`, 
                     'Content-Type': 'application/json',
                 },
             });
@@ -134,17 +134,16 @@ const LinkAccount = () => {
             if (response.ok) {
                 const result = await response.json();
                 console.log('Resultado del servidor:', result);
-                setIsGoogleLinked(true); // Cambiar estado a vinculado para Google
-                localStorage.setItem('isGoogleLinked', 'true'); // Guardar en localStorage
+                setIsGoogleLinked(true); 
+                localStorage.setItem('isGoogleLinked', 'true'); 
 
-                // Usar SweetAlert para mostrar la vinculación exitosa
                 Swal.fire({
                     title: 'Vinculación exitosa!',
                     text: 'La cuenta de Google ha sido vinculada con éxito',
                     icon: 'success',
                     confirmButtonText: 'Aceptar'
                 }).then(() => {
-                    navigate('/link_account'); // Redirigir al componente LinkAccount
+                    navigate('/link_account'); 
                 });
             } else {
                 const errorData = await response.json();
@@ -158,17 +157,17 @@ const LinkAccount = () => {
     const handleUnlinkGoogle = async () => {
         try {
             const response = await fetch(`${URL}/auth/unlink/google/`, {
-                method: 'GET',
+                method: 'GET', 
                 headers: {
                     'Authorization': `Token ${token}`,
                     'Content-Type': 'application/json',
                 },
             });
-
+    
             if (response.ok) {
-                setIsGoogleLinked(false); // Cambiar estado a no vinculado para Google
-                localStorage.setItem('isGoogleLinked', 'false'); // Actualizar localStorage
-
+                setIsGoogleLinked(false); 
+                localStorage.setItem('isGoogleLinked', 'false'); 
+    
                 Swal.fire({
                     title: 'Desvinculación exitosa!',
                     text: 'La cuenta de Google ha sido desvinculada con éxito',
@@ -195,8 +194,8 @@ const LinkAccount = () => {
             });
 
             if (response.ok) {
-                setIsMetaLinked(false); // Cambiar estado a no vinculado para Meta
-                localStorage.setItem('isMetaLinked', 'false'); // Actualizar localStorage
+                setIsMetaLinked(false); 
+                localStorage.setItem('isMetaLinked', 'false'); 
 
                 Swal.fire({
                     title: 'Desvinculación exitosa!',
