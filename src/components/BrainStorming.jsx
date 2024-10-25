@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Modal from "react-modal";
 import { useNavigate } from 'react-router-dom';
+import Swal from "sweetalert2";
 
 
 import Header from './header';
@@ -30,7 +31,12 @@ const Brainstorming = () => {
 
     useEffect(() => {
         if (!token) {
-            alert('Token no disponible. Por favor, inicia sesión nuevamente.');
+            Swal.fire({
+                title: 'Error',
+                text: 'Token no disponible. Por favor, inicia sesión nuevamente.',
+                icon: 'error'
+            });
+            //alert('Token no disponible. Por favor, inicia sesión nuevamente.');
             navigate('/login');
         } else {
             console.log("is_admin:", isAdmin); // Mostramos is_admin en consola
@@ -68,7 +74,12 @@ const Brainstorming = () => {
 
     const handleAddIdea = () => {
         if (newIdea.trim().length < 5) {
-            alert('La idea debe tener al menos 5 caracteres.');
+            Swal.fire({
+                title: 'Advertencia',
+                text: 'La idea debe tener al menos 5 caracteres.',
+                icon: 'warning'
+            });
+            //alert('La idea debe tener al menos 5 caracteres.');
             return;
         }
 
@@ -96,12 +107,22 @@ const Brainstorming = () => {
                 console.log("Idea creada correctamente:", data);
                 setIdeas(prevIdeas => [...prevIdeas, data]);
                 setNewIdea('');
-                alert('Idea creada exitosamente.');
+                Swal.fire({
+                    title: 'Éxito',
+                    text: 'Idea creada exitosamente.',
+                    icon: 'success'
+                });
+                //alert('Idea creada exitosamente.');
                 fetchIdeas();
             })
             .catch(error => {
                 console.error("Error al crear la idea:", error);
-                setError(error.message);
+                Swal.fire({
+                    title: 'Error',
+                    text: `Error al crear la idea`,
+                    icon: 'error'
+                });
+                //setError(error.message);
             });
     };
 
@@ -124,7 +145,12 @@ const Brainstorming = () => {
         const formData = new FormData();
 
         if (action === 'RJ' && reason.trim() === '') {
-            alert('Debes proporcionar un motivo para rechazar la idea');
+            Swal.fire({
+                title: 'Error',
+                text: 'Debes proporcionar un motivo para rechazar la idea',
+                icon: 'Error'
+            });
+            //alert('Debes proporcionar un motivo para rechazar la idea');
             return;
         }
 
@@ -148,7 +174,12 @@ const Brainstorming = () => {
                     throw new Error(errorMessage);
                 }
 
-                alert(`Idea ${action === 'AP' ? 'aceptada' : 'rechazada'} exitosamente`);
+                Swal.fire({
+                    title: 'Éxito',
+                    text: `Idea ${action === 'AP' ? 'aceptada' : 'rechazada'} exitosamente`,
+                    icon: 'success'
+                });
+                //alert(`Idea ${action === 'AP' ? 'aceptada' : 'rechazada'} exitosamente`);
 
                 // Mover la idea a la lista de archivadas
                 setIdeas(prevIdeas => prevIdeas.filter(idea => idea.id !== selectedIdea.id));
@@ -157,7 +188,12 @@ const Brainstorming = () => {
                 closeModal();
             } catch (error) {
                 console.error(`Error al ${action === 'AP' ? 'aceptar' : 'rechazar'} la idea:`, error);
-                setError(error.message);
+                Swal.fire({
+                    title: 'Error',
+                    text: `Error al ${action === 'AP' ? 'aceptar' : 'rechazar'} la idea`,
+                    icon: 'error'
+                });
+                //setError(error.message);
             }
 
         } else if (action === 'edit') {
@@ -183,7 +219,12 @@ const Brainstorming = () => {
                         throw new Error(errorMessage);
                     }
 
-                    alert('Idea editada con exito')
+                    Swal.fire({
+                        title: 'Éxito',
+                        text: `Idea editada con éxito`,
+                        icon: 'success'
+                    });
+                    //alert('Idea editada con exito')
                     console.log("Idea editada correctamente:");
                     const updatedIdeas = ideas.map(idea =>
                         idea.id === selectedIdea.id ? { ...idea, idea: selectedIdea.idea } : idea
@@ -192,7 +233,12 @@ const Brainstorming = () => {
                     closeModal();
                 } catch (error) {
                     console.error("Error al editar la idea:", error);
-                    setError(error.message);
+                    Swal.fire({
+                        title: 'Error',
+                        text: `No eres el creador de esta idea`,
+                        icon: 'error'
+                    });
+                    //alert('No eres el creador de esta idea')
                 }
             }
 
@@ -217,17 +263,33 @@ const Brainstorming = () => {
                         throw new Error(errorMessage);
                     }
 
-                    alert('Idea eliminada con exito')
+                    Swal.fire({
+                        title: 'Éxito',
+                        text: `Idea eliminada exitosamente`,
+                        icon: 'success'
+                    });
+
+                    //alert('Idea eliminada con exito')
                     console.log("Idea eliminada correctamente:");
                     setIdeas(ideas.filter(i => i.id !== selectedIdea.id));
                     closeModal();
                 } catch (error) {
                     console.error("Error al eliminar la idea:", error);
-                    alert(`Error al eliminar la idea: ${error.message}`);
-                    setError(error.message);
+                    Swal.fire({
+                        title: 'Error',
+                        text: `No eres el creador de esta idea`,
+                        icon: 'error'
+                    });
+                    //alert('No eres el creador de esta idea')
+
                 }
             } else {
-                alert("No se seleccionó ninguna idea para eliminar.");
+                Swal.fire({
+                    title: 'Error',
+                    text: `No se ha seleccionado ninguna idea para eliminar`,
+                    icon: 'error'
+                });
+                //alert("No se seleccionó ninguna idea para eliminar.");
             }
         }
 

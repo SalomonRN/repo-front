@@ -4,6 +4,7 @@ import Select from 'react-select';
 import '../css/proposalDetailCm.css';
 import Header from './header';
 import URL from './url';
+import Swal from 'sweetalert2';
 
 const ProposalDetailCm = () => {
     const navigate = useNavigate();
@@ -31,7 +32,12 @@ const ProposalDetailCm = () => {
             try {
                 const token = localStorage.getItem('token');
                 if (!token) {
-                    alert('No tienes token de acceso. Inicia sesión primero.');
+                    Swal.fire({
+                        title: 'Error',
+                        text: `No tienes token de acceso. Inicia sesión primero`,
+                        icon: 'error'
+                    });
+                    //alert('No tienes token de acceso. Inicia sesión primero.');
                     navigate('/login');
                     return;
                 }
@@ -55,17 +61,32 @@ const ProposalDetailCm = () => {
                         setSelectedProposal(proposal);
                         setEditedProposal(proposal);
                     } else {
-                        setError('Propuesta no encontrada.');
+                        Swal.fire({
+                            title: 'Error',
+                            text: `Propuesta no encontrada`,
+                            icon: 'error'
+                        });
+                        //setError('Propuesta no encontrada.');
                     }
 
                     if (comments) {
                         setComments(comments);
                     }
                 } else {
-                    setError('Error al obtener los datos.');
+                    Swal.fire({
+                        title: 'Error',
+                        text: `Error al obtener los datos`,
+                        icon: 'error'
+                    });
+                    //setError('Error al obtener los datos.');
                 }
             } catch (error) {
-                setError('Error en la solicitud al servidor.');
+                Swal.fire({
+                    title: 'Error',
+                    text: `Error en la solicitud al servidor`,
+                    icon: 'error'
+                });
+                //setError('Error en la solicitud al servidor.');
             } finally {
                 setLoading(false);
             }
@@ -121,24 +142,65 @@ const ProposalDetailCm = () => {
                 setNewComment(''); // Limpia el campo del nuevo comentario
             } else {
                 const errorData = await response.json();
-                alert(`Error al agregar el comentario: ${JSON.stringify(errorData)}`);
+                Swal.fire({
+                    title: 'Error',
+                    text: `Error al agregar el comentario`,
+                    icon: 'error'
+                });
+                //alert(`Error al agregar el comentario: ${JSON.stringify(errorData)}`);
             }
         } catch (error) {
-            alert('Error al agregar el comentario');
+            Swal.fire({
+                title: 'Error',
+                text: `Error al agregar el comentario`,
+                icon: 'error'
+            });
+            //alert('Error al agregar el comentario');
         }
+    };
+
+    const isVideoValid = (file) => {
+        return new Promise((resolve, reject) => {
+            const videoElement = document.createElement('video');
+            videoElement.src = URL.createObjectURL(file);
+            
+            videoElement.onloadedmetadata = () => {
+                const duration = videoElement.duration; // Duración en segundos
+                const aspectRatio = videoElement.videoWidth / videoElement.videoHeight;
+                const isVertical = aspectRatio < 1; // Verificar si el video es vertical
+                
+                if (duration <= 60 && isVertical) {
+                    resolve(true);
+                } else {
+                    reject(false);
+                }
+            };
+            
+            videoElement.onerror = () => reject(false);
+        });
     };
 
     const handleEditProposal = async () => {
         try {
             const token = localStorage.getItem('token');
             if (!token) {
-                alert('No tienes token de acceso. Inicia sesión primero.');
+                Swal.fire({
+                    title: 'Error',
+                    text: `No tienes token de acceso. Inicia sesión primero`,
+                    icon: 'error'
+                });
+                //alert('No tienes token de acceso. Inicia sesión primero.');
                 navigate('/login');
                 return;
             }
 
             if (!files || files.length === 0) {
-                alert('Debes seleccionar al menos un archivo para subir.');
+                Swal.fire({
+                    title: 'Warning',
+                    text: `Debes seleccionar al menos un archivo para subir`,
+                    icon: 'warning'
+                });
+                //alert('Debes seleccionar al menos un archivo para subir.');
                 return;
             }
 
@@ -147,33 +209,78 @@ const ProposalDetailCm = () => {
             const hasImage = selectedFileTypes.some(type => type.startsWith('image'));
 
             if (editedProposal.social_media.includes('YT') && hasImage) {
-                alert('No puedes subir imágenes si seleccionas YouTube.');
+                Swal.fire({
+                    title: 'Error',
+                    text: `No puedes subir imágenes si selecccionas YouTube`,
+                    icon: 'warning'
+                });
+                //alert('No puedes subir imágenes si seleccionas YouTube.');
                 return;
             }
 
             if (editedProposal.type === 'IMG' && hasVideo) {
-                alert('No puedes subir videos si seleccionas tipo Imagen.');
+                Swal.fire({
+                    title: 'Error',
+                    text: `No puedes subir videos si selecciones tipo Imágen`,
+                    icon: 'warning'
+                });
+                //alert('No puedes subir videos si seleccionas tipo Imagen.');
                 return;
             }
 
             if (editedProposal.type === 'VID' && hasImage) {
-                alert('No puedes subir imágenes si seleccionas tipo Video.');
+                Swal.fire({
+                    title: 'Error',
+                    text: `No puedes subir imágenes si seleccionas tipo Video`,
+                    icon: 'warning'
+                });
+                //alert('No puedes subir imágenes si seleccionas tipo Video.');
                 return;
             }
 
             if (editedProposal.type === 'STI' && hasVideo) {
-                alert('No puedes subir videos si seleccionas tipo Storie_Image.');
+                Swal.fire({
+                    title: 'Error',
+                    text: `No puedes subir videos si seleccionas tipo Storie_Image`,
+                    icon: 'warning'
+                });
+                //alert('No puedes subir videos si seleccionas tipo Storie_Image.');
                 return;
             }
 
             if (editedProposal.type === 'STV' && hasImage) {
-                alert('No puedes subir imágenes si seleccionas tipo Storie_Video.');
+                Swal.fire({
+                    title: 'Error',
+                    text: `No puedes subir imágenes si seleccionas tipo Storie_Video`,
+                    icon: 'warning'
+                });
+                //alert('No puedes subir imágenes si seleccionas tipo Storie_Video.');
                 return;
             }
 
             if (editedProposal.type === 'STV' && editedProposal.social_media.includes('YT')) {
-                alert('No puedes seleccionar YouTube si eliges Storie_Video.');
+                Swal.fire({
+                    title: 'Error',
+                    text: `No puedes seleccionar Youtube si eliges Storie_Video`,
+                    icon: 'warning'
+                });
+                //alert('No puedes seleccionar YouTube si eliges Storie_Video.');
                 return;
+            }
+
+            // verificacion
+            if (editedProposal.social_media.includes('YT') && editedProposal.type === 'VID') {
+                for (const file of files) {
+                    const isValid = await isVideoValid(file);
+                    if (!isValid) {
+                        Swal.fire({
+                            title: 'Error',
+                            text: `El video debe durar un máximo de 60 segundos y ser en formato vertical`,
+                            icon: 'warning'
+                        });
+                        return;
+                    }
+                }
             }
 
             const formData = new FormData();
@@ -199,14 +306,29 @@ const ProposalDetailCm = () => {
             if (response.ok) {
                 const updatedProposal = await response.json();
                 setSelectedProposal(updatedProposal);
-                alert('Propuesta actualizada correctamente');
+                Swal.fire({
+                    title: 'Éxito',
+                    text: `Propuesta actualizada correctamente`,
+                    icon: 'success'
+                });
+                //alert('Propuesta actualizada correctamente');
                 navigate('/proposals_cm');
             } else {
                 const errorData = await response.json();
-                alert(`Error al actualizar la propuesta: ${JSON.stringify(errorData)}`);
+                Swal.fire({
+                    title: 'Error',
+                    text: `Error al actualizar la propuesta`,
+                    icon: 'error'
+                });
+                //alert(`Error al actualizar la propuesta: ${JSON.stringify(errorData)}`);
             }
         } catch (error) {
-            alert('Error al actualizar la propuesta. Inténtalo nuevamente.');
+        Swal.fire({
+                    title: 'Error',
+                    text: `Error al actualizar la propuesta. Inténtalo nuevamente`,
+                    icon: 'error'
+                });
+            //alert('Error al actualizar la propuesta. Inténtalo nuevamente.');
         }
     };
 

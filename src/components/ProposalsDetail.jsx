@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import '../css/proposalDetail.css';
 import Header from './header';
 import URL from './url';
+import Swal from 'sweetalert2';
 
 const ProposalDetail = () => {
     const navigate = useNavigate();
@@ -32,7 +33,12 @@ const ProposalDetail = () => {
         try {
             const token = localStorage.getItem('token');
             if (!token) {
-                alert('No tienes token de acceso. Inicia sesión primero.');
+                Swal.fire({
+                    title: 'Error',
+                    text: `No tienes token de acceso. Inicia sesión primero`,
+                    icon: 'error'
+                });
+                //alert('No tienes token de acceso. Inicia sesión primero.');
                 navigate('/login');
                 return;
             }
@@ -53,13 +59,28 @@ const ProposalDetail = () => {
                     setSelectedProposal(proposal);
                     fetchComments(); // Llama a la función para obtener comentarios
                 } else {
-                    setError('Propuesta no encontrada.');
+                    Swal.fire({
+                        title: 'Error',
+                        text: `Propuesta no encontrada`,
+                        icon: 'error'
+                    });
+                    //setError('Propuesta no encontrada.');
                 }
             } else {
-                setError('Error al obtener los datos.');
+                Swal.fire({
+                    title: 'Error',
+                    text: `Error al obtener los datos`,
+                    icon: 'error'
+                });
+                //setError('Error al obtener los datos.');
             }
         } catch (error) {
-            setError('Error en la solicitud al servidor.');
+            Swal.fire({
+                title: 'Error',
+                text: `Error en la solicitud al servidor`,
+                icon: 'error'
+            });
+            //setError('Error en la solicitud al servidor.');
         } finally {
             setLoading(false);
         }
@@ -95,7 +116,12 @@ const ProposalDetail = () => {
     const handleAddComment = async (commentBody) => {
         // Asegúrate de que commentBody es una cadena de texto
         if (typeof commentBody !== 'string' || !commentBody.trim()) {
-            alert('El comentario no puede estar vacío o no es válido.');
+            Swal.fire({
+                title: 'Error',
+                text: `El comentario no puede estar vacío o no es válido`,
+                icon: 'error'
+            });
+            //alert('El comentario no puede estar vacío o no es válido.');
             return;
         }
 
@@ -118,11 +144,21 @@ const ProposalDetail = () => {
             } else {
                 const errorData = await response.json(); // Extrae el cuerpo de la respuesta en formato JSON
                 console.error('Error en la respuesta del servidor:', errorData); // Muestra el error en la consola para depuración
-                alert(`Error al agregar el comentario: ${JSON.stringify(errorData)}`); // También puedes mostrar el error en un alert
+                Swal.fire({
+                    title: 'Error',
+                    text: `Error al agregar el comentario`,
+                    icon: 'error'
+                });
+                //alert(`Error al agregar el comentario: ${JSON.stringify(errorData)}`); // También puedes mostrar el error en un alert
             }
         } catch (error) {
             console.error('Error en la solicitud de fetch:', error); // Muestra el error de la solicitud en la consola
-            alert(`Error al agregar el comentario: ${error.message}`); // Muestra un mensaje más detallado al usuario
+            Swal.fire({
+                title: 'Error',
+                text: `Error al agregar el comentario`,
+                icon: 'error'
+            });
+            //alert(`Error al agregar el comentario: ${error.message}`); // Muestra un mensaje más detallado al usuario
         }
     };
 
@@ -153,14 +189,29 @@ const ProposalDetail = () => {
 
             if (response.ok) {
                 const result = await response.json();
-                alert(`Estado cambiado correctamente a: ${newStatus}.`);
+                Swal.fire({
+                    title: 'Éxito',
+                    text: `Estado cambiado correctamente a: ${newStatus}`,
+                    icon: 'success'
+                });
+                //alert(`Estado cambiado correctamente a: ${newStatus}.`);
                 setShowStatusModal(false);
             } else {
                 const errorData = await response.json();
-                alert(`Error al cambiar el estado: ${JSON.stringify(errorData)}`);
+                Swal.fire({
+                    title: 'Error',
+                    text: `Error al cambiar el estado`,
+                    icon: 'error'
+                });
+                //alert(`Error al cambiar el estado: ${JSON.stringify(errorData)}`);
             }
         } catch (error) {
-            alert('Error al cambiar el estado de la propuesta');
+            Swal.fire({
+                title: 'Error',
+                text: `Error al cambiar el estado de la propuesta`,
+                icon: 'error'
+            });
+            //alert('Error al cambiar el estado de la propuesta');
         }
     };
 

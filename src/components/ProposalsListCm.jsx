@@ -4,6 +4,7 @@ import '../css/proposalsList.css';
 import '../css/header.css';
 import Header from "./header";
 import URL from "./url";
+import Swal from "sweetalert2";
 
 const ProposalsListCm = () => {
     const [proposals, setProposals] = useState([]);
@@ -24,7 +25,12 @@ const ProposalsListCm = () => {
             const token = localStorage.getItem('token');
 
             if (!token) {
-                alert('No tienes token de acceso. Inicia sesión primero.');
+                Swal.fire({
+                    title: 'Error',
+                    text: `No tienes token de acceso. Inicia sesión primero`,
+                    icon: 'error'
+                });
+                //alert('No tienes token de acceso. Inicia sesión primero.');
                 navigate('/login');  // Redirigir al login si no hay token
                 return;
             }
@@ -67,14 +73,19 @@ const ProposalsListCm = () => {
             <h1>Propuestas</h1>
             <ul>
                 {/* Lista para mostrar las propuestas */}
-                {proposals.map(proposal => (
-                    <li className="proposals" key={proposal.id} onClick={() => handleClick(proposal.id)}>
-                        {/* Cada propuesta se muestra en un elemento li con una key única */}
-                        Nombre: {proposal.title} <br />
-                        Descripción: {proposal.copy} <br />
-                        Hecha por: {proposal.proposed_by}
-                    </li>
-                ))}
+                {proposals.length === 0 ? (
+                    <p className="msj_empty">No hay propuestas disponibles por el momento :c</p>
+                ) : (
+                    <ul>
+                        {proposals.map(proposal => (
+                            <li className="proposals" key={proposal.id} onClick={() => handleClick(proposal.id)}>
+                                Nombre: {proposal.title} <br />
+                                Descripción: {proposal.copy} <br />
+                                Hecha por: {proposal.proposed_by}
+                            </li>
+                        ))}
+                    </ul>
+                )}
             </ul>
         </div>
     );

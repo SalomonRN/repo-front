@@ -80,7 +80,6 @@ const About = () => {
                 <section className="about-content">
                     <div className="about-objective">
                         <h2 className="subtitle-about">Nuestros Objetivos :D</h2>
-                        <p className="p2-about">no sé si poner texto hmmm</p>
                     </div>
 
                     <div className="about-goals">

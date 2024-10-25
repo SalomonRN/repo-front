@@ -33,8 +33,7 @@ function App() {
               <Route path="/calendar" element={<Calendar />} />
               <Route path="/ideas-archive" element={<IdeasArchive />} />
               <Route path="/proposals_form" element={<ProposalsForms />} />
-              <Route path="/auth/google/oauth2callback" element={<LinkAccount />} />
-              <Route path="/auth/meta" element={<LinkAccount />} />
+              
             </Route>
 
             {/* Rutas protegidas solo para admins */}
@@ -43,6 +42,8 @@ function App() {
               <Route path="/brainstorming" element={<Brainstorming />} />
               <Route path="/proposals" element={<ProposalsList />} />
               <Route path="/content_proposal/:id" element={<ProposalDetail />} />
+              <Route path="/auth/google/oauth2callback" element={<LinkAccount />} />
+              <Route path="/auth/meta" element={<LinkAccount />} />
               
             </Route>
 

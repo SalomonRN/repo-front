@@ -4,6 +4,8 @@ import axios from 'axios';
 import '../css/proposalsList.css';
 import Header from './header';
 import URL from "./url";
+import Swal from "sweetalert2";
+
 
 const ProposalsList = () => {
     const [proposals, setProposals] = useState([]);
@@ -25,6 +27,11 @@ const ProposalsList = () => {
                 const token = localStorage.getItem('token');
 
                 if (!token) {
+                    Swal.fire({
+                        title: 'Error',
+                        text: `No tienes token de acceso. Inicia sesión primero`,
+                        icon: 'error'
+                    });
                     console.error('No se encontró el token de autenticación');
                     return;
                 }

@@ -6,6 +6,8 @@ import '../css/proposalsForm.css';
 import Header from './header';
 import { AuthContext } from "../context/AuthContext";
 import URL from "./url";
+import Swal from "sweetalert2";
+
 
 const ProposalsForms = () => {
     const navigate = useNavigate();
@@ -37,7 +39,12 @@ const ProposalsForms = () => {
     useEffect(() => {
         // Verificar que el token esté presente al cargar el componente
         if (!token) {
-            alert('Token no disponible. Por favor, inicia sesión nuevamente.');
+            Swal.fire({
+                title: 'Error',
+                text: `No tienes token de acceso. Inicia sesión primero`,
+                icon: 'error'
+            });
+            //alert('Token no disponible. Por favor, inicia sesión nuevamente.');
             navigate('/login'); // Redirige a la página de login si no hay token
         }
     }, [token, navigate]); // Dependencias del useEffect
@@ -62,7 +69,12 @@ const ProposalsForms = () => {
     const validateForm = () => {
         // Verificación de archivos
         if (files.length === 0) {
-            alert('Debes seleccionar al menos un archivo para subir.');
+            Swal.fire({
+                title: 'Warning',
+                text: `Debes seleccionar al menos un archivo para subir`,
+                icon: 'warning'
+            });
+            //alert('Debes seleccionar al menos un archivo para subir.');
             return false;
         }
 
@@ -72,34 +84,64 @@ const ProposalsForms = () => {
 
         // Verificaciones para YouTube y archivos
         if (socialMedia.includes('YT') && hasImage) {
+            Swal.fire({
+                title: 'Error',
+                text: `No puedes subir imágenes si seleccionas YouTube`,
+                icon: 'warning'
+            });
             alert('No puedes subir imágenes si seleccionas YouTube.');
             return false;
         }
 
         if (type === 'IMG' && hasVideo) {
-            alert('No puedes subir videos si seleccionas tipo Imagen.');
+            Swal.fire({
+                title: 'Error',
+                text: `No puedes subir videos si selecciones tipo Imágen`,
+                icon: 'warning'
+            });
+            //alert('No puedes subir videos si seleccionas tipo Imagen.');
             return false;
         }
 
         if (type === 'VID' && hasImage) {
-            alert('No puedes subir imágenes si seleccionas tipo Video.');
+            Swal.fire({
+                title: 'Error',
+                text: `No puedes subir imágenes si seleccionas tipo Video`,
+                icon: 'warning'
+            });
+            //alert('No puedes subir imágenes si seleccionas tipo Video.');
             return false;
         }
 
         // Verificaciones para Storie_Image y Storie_Video
         if (type === 'STI' && hasVideo) {
-            alert('No puedes subir videos si seleccionas tipo Storie_Image.');
+            Swal.fire({
+                title: 'Error',
+                text: `No puedes subir videos si seleccionas tipo Storie_Image`,
+                icon: 'warning'
+            });
+            //alert('No puedes subir videos si seleccionas tipo Storie_Image.');
             return false;
         }
 
         if (type === 'STV' && hasImage) {
-            alert('No puedes subir imágenes si seleccionas tipo Storie_Video.');
+            Swal.fire({
+                title: 'Error',
+                text: `No puedes subir imágenes si seleccionas tipo Storie_Video`,
+                icon: 'warning'
+            });
+            //alert('No puedes subir imágenes si seleccionas tipo Storie_Video.');
             return false;
         }
 
         // Verificación para Storie_Video y YouTube
         if (type === 'STV' && socialMedia.includes('YT')) {
-            alert('No puedes seleccionar YouTube si eliges Storie_Video.');
+            Swal.fire({
+                title: 'Error',
+                text: `No puedes seleccionar Youtube si eliges Storie_Video`,
+                icon: 'warning'
+            });
+            //alert('No puedes seleccionar YouTube si eliges Storie_Video.');
             return false;
         }
 
@@ -107,7 +149,12 @@ const ProposalsForms = () => {
         if (socialMedia.includes('YT') && type === 'VID') {
             for (const file of files) {
                 if (!isVideoValid(file)) {
-                    alert('El video debe durar un máximo de 60 segundos y ser en formato vertical.');
+                    Swal.fire({
+                        title: 'Error',
+                        text: `El video debe durar un máximo de 60 segundos y ser en formato vertical`,
+                        icon: 'warning'
+                    });
+                    //alert('El video debe durar un máximo de 60 segundos y ser en formato vertical.');
                     return false;
                 }
             }
@@ -153,11 +200,21 @@ const ProposalsForms = () => {
             });
 
             console.log('Respuesta del servidor:', response.data);
-            alert('Propuesta enviada con éxito');
+            Swal.fire({
+                title: 'Éxito',
+                text: `Propuesta enviada con éxito`,
+                icon: 'success'
+            });
+            //alert('Propuesta enviada con éxito');
             navigate('/proposals'); // Redirige a la página deseada después de enviar la propuesta
         } catch (error) {
             console.error('Error al enviar la propuesta:', error.response ? error.response.data : error.message);
-            alert('Hubo un error al enviar la propuesta: ' + (error.response ? error.response.data : error.message));
+            Swal.fire({
+                title: 'Error',
+                text: `Hubo un error al enviar la propuesta`,
+                icon: 'warning'
+            });
+            //alert('Hubo un error al enviar la propuesta: ' + (error.response ? error.response.data : error.message));
         }
     };
 

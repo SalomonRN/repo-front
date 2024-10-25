@@ -87,6 +87,7 @@
 
 .idea-postit:hover {
     transform: scale(1.05);
+    border-radius: 5px;
 }
 
 .modal {
@@ -129,6 +130,7 @@ select {
     border-radius: 8px;
     color: white;
     transition: background-color 0.3s;
+    border: none;
 }
 
 .btn-add:hover{
@@ -142,6 +144,7 @@ select {
     cursor: pointer;
     transition: background-color 0.3s;
     border-radius: 8px;
+    border: none;
 }
 
 .archive-button:hover{

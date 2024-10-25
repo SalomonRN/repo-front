@@ -39,11 +39,12 @@ const Header = ({ toggleMenu, menuOpen }) => {
             </button>
             <div className={`menu ${menuOpen ? 'open' : ''}`}>
                 <center>
-                    <button className="opc" onClick={handleBrainstormingRedirect}>Ir a lluvia de ideas</button>
-                    <button className="opc" onClick={handleProposalsRedirect}>Ir a Propuestas</button>
-                    <button className="opc" onClick={() => navigate('/proposals_form')}>Ir al formulario de Propuestas</button>
-                    <button className="opc" onClick={() => navigate('/calendar')}>Ir a Calendario</button>
-                    <button className="opc" onClick={() => navigate('/about')}>Ir a About</button>
+                    <button className="opc" onClick={() => navigate('/')}>Home</button>
+                    <button className="opc" onClick={handleBrainstormingRedirect}>Lluvia de ideas</button>
+                    <button className="opc" onClick={handleProposalsRedirect}>Propuestas</button>
+                    <button className="opc" onClick={() => navigate('/proposals_form')}>Formulario de Propuestas</button>
+                    <button className="opc" onClick={() => navigate('/calendar')}>Calendario</button>
+                    <button className="opc" onClick={() => navigate('/about')}>About</button>
                     {/*<button className="opc" onClick={() => navigate('/link_account')}>Ir a Vinvular cuentas</button>*/}
                     {isLoggedIn && (
                         <button className="opc" onClick={handleLogout}>Cerrar sesión</button>

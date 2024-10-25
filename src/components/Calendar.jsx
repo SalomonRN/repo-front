@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import '../css/calendar.css';
 import Header from './header';
 import URL from "./url";
+import Swal from 'sweetalert2';
 
 Modal.setAppElement('#root');
 
@@ -41,7 +42,12 @@ function Calendar() {
 
     useEffect(() => {
         if (!token) {
-            alert('Token no disponible. Por favor, inicia sesión nuevamente.');
+            Swal.fire({
+                title: 'Error',
+                text: `Token no disponible. Por favor, inicia sesión nuevamente`,
+                icon: 'error'
+            });
+            //alert('Token no disponible. Por favor, inicia sesión nuevamente.');
             navigate('/login');
         }
     }, [token, navigate]);
@@ -69,7 +75,12 @@ function Calendar() {
             setEventDate(arg.dateStr); // Establece la fecha del evento
             openModal(); // Abre el modal para crear el evento
         } else {
-            alert('No tienes permisos para crear eventos.'); // Mensaje de advertencia
+            Swal.fire({
+                title: 'Error',
+                text: `No tienes permisos para crear eventos`,
+                icon: 'error'
+            });
+            //alert('No tienes permisos para crear eventos.'); // Mensaje de advertencia
         }
     };
 
@@ -111,7 +122,12 @@ function Calendar() {
     const handleSaveEvent = () => {
         // Verifica que el título tenga un máximo de 45 caracteres
         if (eventTitle.length > 45) {
-            alert('El título no puede exceder los 45 caracteres.');
+            Swal.fire({
+                title: 'Error',
+                text: `El título no puede exceder los 45 caracteres`,
+                icon: 'warning'
+            });
+            //alert('El título no puede exceder los 45 caracteres.');
             return; // Salir de la función si la validación falla
         }
 
@@ -152,7 +168,12 @@ function Calendar() {
             })
             .then(data => {
                 console.log("Evento creado correctamente:", data);
-                alert('Evento creado con éxito')
+                Swal.fire({
+                    title: 'Éxito',
+                    text: `Evento creado con éxito`,
+                    icon: 'success'
+                });
+                //alert('Evento creado con éxito')
                 // Agregar el nuevo evento al estado
                 setEvents(prevEvents => [...prevEvents, data]); // Esto debería funcionar para mostrarlo en el calendario
                 fetchEvents();
@@ -161,7 +182,12 @@ function Calendar() {
             })
             .catch(error => {
                 console.error("Error al crear el evento:", error);
-                setError(error.message);
+                Swal.fire({
+                    title: 'Error',
+                    text: `Error al crear el evento`,
+                    icon: 'error'
+                });
+                //setError(error.message);
             });
     };
 
@@ -190,17 +216,32 @@ function Calendar() {
                 // Actualizar el evento en el estado
                 fetchEvents();
                 closeModal();
+                Swal.fire({
+                    title: 'Éxito',
+                    text: `Evento actualizado exitosamente`,
+                    icon: 'success'
+                });
                 alert('Evento actualizado exitosamente.');
             })
             .catch(error => {
                 console.error("Error al actualizar el evento:", error);
-                setError(error.message);
+                Swal.fire({
+                    title: 'Error',
+                    text: `Error al actualizar el evento`,
+                    icon: 'error'
+                });
+                //setError(error.message);
             });
     };
 
     const validateEventForm = () => {
         if (!eventTitle || !eventDescription) {
-            alert('El título y la descripción son obligatorios.');
+            Swal.fire({
+                title: 'Alerta',
+                text: `El título y la descripción son obligatorios`,
+                icon: 'warning'
+            });
+            //alert('El título y la descripción son obligatorios.');
             return false;
         }
         setError('');
@@ -234,11 +275,21 @@ function Calendar() {
             })
             .then(() => {
                 console.log('Evento eliminado con éxito.');
+                Swal.fire({
+                    title: 'Éxito',
+                    text: `Evento eliminado con éxito`,
+                    icon: 'success'
+                });
                 alert('Evento eliminado con éxito')
             })
             .catch(error => {
                 console.error("Error al eliminar el evento:", error);
-                setError(error.message); // Muestra el mensaje de error
+                Swal.fire({
+                    title: 'Error',
+                    text: `Error al eliminar el evento`,
+                    icon: 'error'
+                });
+                //setError(error.message); // Muestra el mensaje de error
             });
     };
 
@@ -294,18 +345,33 @@ function Calendar() {
             });
     
             if (response.ok) {
-                alert('Evento marcado como completado.');
+                Swal.fire({
+                    title: 'Éxito',
+                    text: `Evento marcado como completado`,
+                    icon: 'success'
+                });
+                //alert('Evento marcado como completado.');
                 closeViewEventModal();
                 fetchEvents(); 
             } else {
                 const errorData = await response.json();
                 console.error('Error al marcar el evento como completado:', errorData);
-                setError(errorData.message || 'No se pudo marcar el evento como completado.');
+                Swal.fire({
+                    title: 'Error',
+                    text: `No se pudo marcar el evento como completado`,
+                    icon: 'error'
+                });
+                //setError(errorData.message || 'No se pudo marcar el evento como completado.');
                 
             }
         } catch (error) {
             console.error('Error en la solicitud:', error);
-            setError('Error en la solicitud al marcar el evento como completado.');
+            Swal.fire({
+                title: 'Error',
+                text: `Error en la solicitud al marcar el evento como completado`,
+                icon: 'error'
+            });
+            //setError('Error en la solicitud al marcar el evento como completado.');
         }
     };
     

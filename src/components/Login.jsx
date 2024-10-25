@@ -5,6 +5,7 @@ import { AuthContext } from '../context/AuthContext'; // Importar el contexto
 import '../css/login.css';
 import imagen from '../images/logologin.png';
 import URL from "./url";
+import Swal from 'sweetalert2';
 
 const Login = () => {
 
@@ -49,11 +50,21 @@ const Login = () => {
                 navigate('/'); 
             } else {
                 console.error('Error al iniciar sesión:', response.data.message);
-                alert('Error: ' + response.data.message);
+                Swal.fire({
+                    title: 'Error',
+                    text: `Error al iniciar sesión`,
+                    icon: 'error'
+                });
+                //alert('Error: ' + response.data.message);
             }
         } catch (error) {
             console.error('Error al intentar iniciar sesión:', error);
-            alert('Error de red: no se pudo conectar al servidor.');
+            Swal.fire({
+                title: 'Éxito',
+                text: `Error de red: no se pudo conectar al servidor.`,
+                icon: 'success'
+            });
+            //alert('Error de red: no se pudo conectar al servidor.');
         }
     };
 
