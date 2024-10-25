@@ -51,6 +51,7 @@ const LinkAccount = () => {
             });
 
             const data = await response.json();
+            console.log("URL:", data);
             if (data) {
                 window.location.href = data; // Redirige a la autenticación de Google
             } else {
@@ -77,6 +78,8 @@ const LinkAccount = () => {
 
     const handleOauthCallbackGoogle = async (queryString) => {
         const url = `${URL}/auth/google/oauth2callback${queryString}`;
+        console.log("Google Callback URL:", url);
+        
         try {
             const response = await fetch(url, {
                 method: 'GET',
@@ -85,20 +88,24 @@ const LinkAccount = () => {
                     'Content-Type': 'application/json',
                 },
             });
-    
+
             if (response.ok) {
+                const responseData = await response.json();
+                console.log("Google Callback Response Data:", responseData);
+
                 setIsGoogleLinked(true);
                 localStorage.setItem('isGoogleLinked', 'true');
                 Swal.fire({
                     title: 'Vinculación exitosa!',
                     text: 'La cuenta de Google ha sido vinculada',
                     icon: 'success',
-                    willClose: () => {
-                        navigate('/link_account'); // Redirigir después de cerrar la alerta
-                    }
+                }).then(() => {
+                    console.log("Redirigiendo a /link_account...");
+                    navigate('/link_account'); // Redirigir después del SweetAlert
                 });
             } else {
                 const errorData = await response.json();
+                console.log("Error en Google Callback:", errorData);
                 Swal.fire({
                     title: 'Error',
                     text: `Error al procesar el callback de Google`,
@@ -106,6 +113,7 @@ const LinkAccount = () => {
                 });
             }
         } catch (error) {
+            console.error("Error en la solicitud al servidor en Google Callback:", error);
             Swal.fire({
                 title: 'Error',
                 text: `Error en la solicitud al servidor`,
