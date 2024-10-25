@@ -15,40 +15,30 @@ const LinkAccount = () => {
     const [isMetaLinked, setIsMetaLinked] = useState(localStorage.getItem('isMetaLinked') === 'true'); // Estado de vinculación de Meta
 
     useEffect(() => {
-        // Verificar el token al cargar el componente
         if (!token) {
             console.error('No se encontró el token de autenticación');
             setError('No se encontró el token de autenticación. Por favor, inicia sesión nuevamente.');
-            return; // Salir si no hay token
+            return; 
         }
-
-        // Si hay parámetros en la URL, llamar a la función de callback para Google
+    
         const queryString = location.search;
-        if (!hasCheckedGoogle && queryString) {
-            const params = new URLSearchParams(queryString);
-            const code = params.get('code');
-            const state = params.get('state');
-
-            // Solo proceder si existen los parámetros de Google en la URL
-            if (code && state) {
-                handleOauthCallback(queryString, 'google'); // Llama a la función de callback para Google
-                setHasCheckedGoogle(true); // Marca que ya se ha ejecutado el callback de Google
-            }
+        const params = new URLSearchParams(queryString);
+        const code = params.get('code');
+        const state = params.get('state');
+    
+        // Manejar callback de Google
+        if (!hasCheckedGoogle && code && state && queryString.includes('google')) {
+            handleOauthCallback(queryString);
+            setHasCheckedGoogle(true);
         }
-
-        // Si hay parámetros en la URL, llamar a la función de callback para Meta
-        if (!hasCheckedMeta && queryString) {
-            const params = new URLSearchParams(queryString);
-            const code = params.get('code');
-            const state = params.get('state');
-
-            // Solo proceder si existen los parámetros de Meta en la URL
-            if (code && state) {
-                handleOauthMetaCallback(queryString); // Llama a la función de callback para Meta
-                setHasCheckedMeta(true); // Marca que ya se ha ejecutado el callback de Meta
-            }
+    
+        // Manejar callback de Meta
+        if (!hasCheckedMeta && code && state && queryString.includes('meta')) {
+            handleOauthMetaCallback(queryString);
+            setHasCheckedMeta(true);
         }
-    }, [hasCheckedGoogle, hasCheckedMeta, location.search, token]); // Dependencias de useEffect
+    }, [hasCheckedGoogle, hasCheckedMeta, location.search, token]);
+    
 
     const handleLinkGoogle = async () => {
         try {
@@ -81,25 +71,24 @@ const LinkAccount = () => {
 
     const handleOauthMetaCallback = async (queryString) => {
         console.log('Procesando callback de Meta con queryString:', queryString);
-
-        const url = `${URL}/auth/meta/${queryString}`; // Corregido el URL
-
+    
+        const url = `${URL}/auth/meta${queryString}`; // Corregido el URL
+    
         try {
             const response = await fetch(url, {
                 method: 'GET',
                 headers: {
-                    'Authorization': `Token ${token}`, // Agregar el token a la cabecera
+                    'Authorization': `Token ${token}`,
                     'Content-Type': 'application/json',
                 },
             });
-
+    
             if (response.ok) {
                 const result = await response.json();
                 console.log('Resultado del servidor Meta:', result);
-                setIsMetaLinked(true); // Cambiar estado a vinculado para Meta
-                localStorage.setItem('isMetaLinked', 'true'); // Guardar en localStorage
-
-                // Usar SweetAlert para mostrar la vinculación exitosa
+                setIsMetaLinked(true);
+                localStorage.setItem('isMetaLinked', 'true');
+    
                 Swal.fire({
                     title: 'Vinculación exitosa!',
                     text: 'La cuenta de Meta ha sido vinculada con éxito',
@@ -116,6 +105,7 @@ const LinkAccount = () => {
             setError('Error en la solicitud al servidor');
         }
     };
+    
 
     const handleOauthCallback = async (queryString) => {
         console.log('Procesando callback con queryString:', queryString);
