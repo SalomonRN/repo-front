@@ -156,7 +156,7 @@ const LinkAccount = () => {
 
     const handleUnlinkGoogle = async () => {
         try {
-            const response = await fetch(`${URL}/auth/unlink/google/`, {
+            const response = await fetch(`${URL}/auth/google/unlink/`, {
                 method: 'GET', 
                 headers: {
                     'Authorization': `Token ${token}`,
@@ -185,7 +185,7 @@ const LinkAccount = () => {
 
     const handleUnlinkMeta = async () => {
         try {
-            const response = await fetch(`${URL}/auth/unlink/meta/`, {
+            const response = await fetch(`${URL}/auth/google/unlink/`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Token ${token}`,
