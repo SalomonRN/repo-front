@@ -72,7 +72,7 @@ const LinkAccount = () => {
     const handleOauthMetaCallback = async (queryString) => {
         console.log('Procesando callback de Meta con queryString:', queryString);
     
-        const url = `${URL}/auth/meta${queryString}`; // Corregido el URL
+        const url = `${URL}/auth/meta/${queryString}`; // Corregido el URL
     
         try {
             const response = await fetch(url, {
@@ -110,7 +110,7 @@ const LinkAccount = () => {
     const handleOauthCallback = async (queryString) => {
         console.log('Procesando callback con queryString:', queryString);
 
-        const url = `https://django-tester.onrender.com/auth/google/oauth2callback${queryString}`;
+        const url = `${URL}/auth/google/oauth2callback${queryString}`;
 
         try {
             const response = await fetch(url, {
