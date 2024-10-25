@@ -158,7 +158,7 @@ const LinkAccount = () => {
     const handleUnlinkGoogle = async () => {
         try {
             const response = await fetch(`${URL}/auth/unlink/google/`, {
-                method: 'POST',
+                method: 'GET',
                 headers: {
                     'Authorization': `Token ${token}`,
                     'Content-Type': 'application/json',
@@ -187,7 +187,7 @@ const LinkAccount = () => {
     const handleUnlinkMeta = async () => {
         try {
             const response = await fetch(`${URL}/auth/unlink/meta/`, {
-                method: 'POST',
+                method: 'GET',
                 headers: {
                     'Authorization': `Token ${token}`,
                     'Content-Type': 'application/json',
@@ -214,15 +214,18 @@ const LinkAccount = () => {
     };
 
     return (
-        <div className="link-account-container">
-            <h2>Vinculación de cuentas</h2>
+        <div className="link-container">
+            <center>
+            <h1>Vinculación de cuentas</h1>
             {error && <p className="error-message">{error}</p>}
+            
             <button className="google-button" onClick={isGoogleLinked ? handleUnlinkGoogle : handleLinkGoogle}>
                 {isGoogleLinked ? 'Desvincular cuenta' : 'Vincular cuenta de Google'}
             </button>
             <button className="meta-button" onClick={isMetaLinked ? handleUnlinkMeta : handleLinkMeta}>
                 {isMetaLinked ? 'Desvincular cuenta' : 'Vincular cuenta de Meta'}
             </button>
+            </center>
         </div>
     );
 };
