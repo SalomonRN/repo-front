@@ -20,7 +20,12 @@ const LinkAccount = () => {
 
     useEffect(() => {
         if (!token) {
-            setError('No se encontró el token de autenticación. Por favor, inicia sesión nuevamente.');
+            Swal.fire({
+                title: 'Error',
+                text: `No se encontró el token de autenticación. Por favor, inicia sesión nuevamente`,
+                icon: 'error'
+            });
+            //setError('No se encontró el token de autenticación. Por favor, inicia sesión nuevamente.');
             return;
         }
 
@@ -49,10 +54,20 @@ const LinkAccount = () => {
             if (data) {
                 window.location.href = data; // Redirige a la autenticación de Google
             } else {
-                setError('Error al obtener la URL de autenticación de Google');
+                Swal.fire({
+                    title: 'Error',
+                    text: `Error al obtener la URL de autenticación de Google`,
+                    icon: 'error'
+                });
+                //setError('Error al obtener la URL de autenticación de Google');
             }
         } catch (error) {
-            setError('Error al iniciar el proceso de vinculación con Google');
+            Swal.fire({
+                title: 'Error',
+                text: `Error al iniciar el proceso de vinculación con Google`,
+                icon: 'error'
+            });
+            //setError('Error al iniciar el proceso de vinculación con Google');
         }
     };
 
@@ -70,7 +85,7 @@ const LinkAccount = () => {
                     'Content-Type': 'application/json',
                 },
             });
-
+    
             if (response.ok) {
                 setIsGoogleLinked(true);
                 localStorage.setItem('isGoogleLinked', 'true');
@@ -78,13 +93,24 @@ const LinkAccount = () => {
                     title: 'Vinculación exitosa!',
                     text: 'La cuenta de Google ha sido vinculada',
                     icon: 'success',
-                }).then(() => navigate('/link_account')); // Redirigir después del SweetAlert
+                    willClose: () => {
+                        navigate('/link_account'); // Redirigir después de cerrar la alerta
+                    }
+                });
             } else {
                 const errorData = await response.json();
-                setError(`Error al procesar el callback de Google: ${errorData.message}`);
+                Swal.fire({
+                    title: 'Error',
+                    text: `Error al procesar el callback de Google`,
+                    icon: 'error'
+                });
             }
         } catch (error) {
-            setError('Error en la solicitud al servidor');
+            Swal.fire({
+                title: 'Error',
+                text: `Error en la solicitud al servidor`,
+                icon: 'error'
+            });
         }
     };
 
@@ -112,11 +138,21 @@ const LinkAccount = () => {
                 }).then(() => navigate('/link_account')); 
             } else {
                 const errorData = await response.json();
-                setError(`Error al procesar el callback de Meta: ${errorData.message}`);
+                Swal.fire({
+                    title: 'Error',
+                    text: `Error al procesar el callback de Meta`,
+                    icon: 'error'
+                });
+                //setError(`Error al procesar el callback de Meta: ${errorData.message}`);
                 console.log(`Error al procesar el callback de Meta: ${JSON.stringify(errorData, null, 2)}`); 
             }
         } catch (error) {
-            setError('Error en la solicitud al servidor');
+            Swal.fire({
+                title: 'Error',
+                text: `Error en la solicitud al servidor`,
+                icon: 'error'
+            });
+            //setError('Error en la solicitud al servidor');
             console.log('Error en la solicitud al servidor:', error); 
         }
     };
@@ -142,10 +178,20 @@ const LinkAccount = () => {
                 }).then(() => navigate('/link_account'));
             } else {
                 const errorData = await response.json();
-                setError(`Error al desvincular la cuenta de Google: ${errorData.message}`);
+                Swal.fire({
+                    title: 'Error',
+                    text: `Error al desvincular la cuenta de Google`,
+                    icon: 'error'
+                });
+                //setError(`Error al desvincular la cuenta de Google: ${errorData.message}`);
             }
         } catch (error) {
-            setError('Error al procesar la solicitud de desvinculación');
+            Swal.fire({
+                title: 'Error',
+                text: `Error al procesar la solicitud de desvinculación`,
+                icon: 'error'
+            });
+            //setError('Error al procesar la solicitud de desvinculación');
         }
     };
 
@@ -170,10 +216,20 @@ const handleUnlinkMeta = async () => {
                 }).then(() => navigate('/link_account'));
             } else {
                 const errorData = await response.json();
-                setError(`Error al desvincular la cuenta de Meta: ${errorData.message}`);
+                Swal.fire({
+                    title: 'Error',
+                    text: `Error al desvincular la cuenta de Meta`,
+                    icon: 'error'
+                });
+                //setError(`Error al desvincular la cuenta de Meta: ${errorData.message}`);
             }
         } catch (error) {
-            setError('Error al procesar la solicitud de desvinculación');
+            Swal.fire({
+                title: 'Error',
+                text: `Error al procesar la solicitud de desvinculación`,
+                icon: 'error'
+            });
+            //setError('Error al procesar la solicitud de desvinculación');
         }
     };
 
