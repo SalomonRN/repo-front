@@ -31,12 +31,18 @@ const LinkAccount = () => {
 
         // Procesar la URL de callback
         const queryString = location.search;
+        console.log("Query:", queryString);
+
         if (queryString.includes('code=')) {
             if (queryString.includes('state=google')) {
+                console.log("callback gugul");
                 handleOauthCallbackGoogle(queryString);
             } else if (queryString.includes('state=meta')) {
                 handleOauthCallbackMeta(queryString);
             }
+        } else {
+            console.log("No se encontró un código en la query string.");
+
         }
     }, [location.search, token]);
 
