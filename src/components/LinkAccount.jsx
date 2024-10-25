@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import '../css/linkAccount.css';
 import { useLocation, useNavigate } from "react-router-dom"; // Importar useNavigate
 import Swal from 'sweetalert2'; // Importar SweetAlert
+import URL from "./url";
 
 const LinkAccount = () => {
     const location = useLocation();
@@ -51,7 +52,7 @@ const LinkAccount = () => {
 
     const handleLinkGoogle = async () => {
         try {
-            const response = await fetch('https://django-tester.onrender.com/auth/google/');
+            const response = await fetch(`${URL}/auth/google/`);
             const data = await response.json();
             console.log('Respuesta del servidor (link):', data);
 
@@ -75,7 +76,7 @@ const LinkAccount = () => {
     const handleOauthMetaCallback = async (queryString) => {
         console.log('Procesando callback de Meta con queryString:', queryString);
 
-        const url = `https://django-tester.onrender.com/auth/meta/${queryString}`;
+        const url = `${URL}{auth/meta/${queryString}`;
 
         try {
             const response = await fetch(url, {
