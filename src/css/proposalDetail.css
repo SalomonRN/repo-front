@@ -78,6 +78,8 @@
   color: white;
   cursor: pointer;
   transition: background-color 0.3s;
+  margin-right: 5px;
+  margin-left: 5px;
 }
 
 .btn-edit-ad:hover,

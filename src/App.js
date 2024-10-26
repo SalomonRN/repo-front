@@ -13,6 +13,7 @@ import Home from './components/home';
 import BrainStormingCM from './components/BrainStormingCM';
 import About from './components/About';
 import LinkAccount from './components/LinkAccount';
+import PasswordReset from './components/PasswordReset';
 import Unauthorized from './components/Unauthorized';
 import GoogleCallback from './components/GoogleCalback';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -27,6 +28,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/about" element={<About />} />
+            <Route path="/psw_reset" element={<PasswordReset />} />
 
             {/* Rutas protegidas para todos los usuarios con token */}
             <Route element={<ProtectedRoute allowBothRoles={true} />}>

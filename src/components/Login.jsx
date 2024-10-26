@@ -6,6 +6,7 @@ import '../css/login.css';
 import imagen from '../images/logologin.png';
 import URL from "./url";
 import Swal from 'sweetalert2';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
 
@@ -101,6 +102,12 @@ const Login = () => {
                                 Ingresar
                             </button>
                         </form> 
+                        {/*<p className='forgot-password'>
+                            ¿Olvidaste tu contraseña?{' '}
+                            <Link to="/psw_reset" className='link-reset'>
+                                Haz clic aquí
+                            </Link>
+                        </p> */}
                     </center>
                 </div>
             </div>

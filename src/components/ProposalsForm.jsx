@@ -213,13 +213,18 @@ const ProposalsForms = () => {
             });
 
             console.log('Respuesta del servidor:', response.data);
-            Swal.fire({
+            await Swal.fire({
                 title: 'Éxito',
                 text: `Propuesta enviada con éxito`,
-                icon: 'success'
+                icon: 'success',
+                timer: 2000, // Duración del SweetAlert (en milisegundos)
+                timerProgressBar: true,
+                willClose: () => {
+                    navigate('/proposals'); // Redirige después de que se cierre el SweetAlert
+                }
             });
             //alert('Propuesta enviada con éxito');
-            navigate('/proposals'); // Redirige a la página deseada después de enviar la propuesta
+            //navigate('/proposals'); // Redirige a la página deseada después de enviar la propuesta
         } catch (error) {
             console.error('Error al enviar la propuesta:', error.response ? error.response.data : error.message);
             Swal.fire({

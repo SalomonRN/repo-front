@@ -3,6 +3,7 @@ import '../css/linkAccount.css';
 import { useLocation, useNavigate } from "react-router-dom"; 
 import Swal from 'sweetalert2'; 
 import URL from "./url";
+import Header from "./header";
 
 const LinkAccount = () => {
     const location = useLocation();
@@ -11,6 +12,13 @@ const LinkAccount = () => {
     const [token, setToken] = useState(localStorage.getItem('token')); 
     const [isGoogleLinked, setIsGoogleLinked] = useState(localStorage.getItem('isGoogleLinked') === 'true');
     const [isMetaLinked, setIsMetaLinked] = useState(localStorage.getItem('isMetaLinked') === 'true'); 
+
+    const [menuHeight, setMenuHeight] = useState('0px');
+    const [menuOpen, setMenuOpen] = useState(false);
+    const toggleMenu = () => {
+        setMenuOpen(!menuOpen);
+        setMenuHeight(menuOpen ? '0px' : '400px');
+    };
 
     useEffect(() => {
         if (!token) {
@@ -179,13 +187,16 @@ const LinkAccount = () => {
     };
 
     return (
-        <div className="link-container">
-            <center><h2>Vincular Cuentas</h2>
+            <div className={`link-container ${menuOpen ? 'shifted' : ''}`} style={{ marginTop: menuHeight }}>
+            <div className="header-container">
+                <Header toggleMenu={toggleMenu} menuOpen={menuOpen} />
+            </div>
+            <center><h1>Vincular Cuentas</h1>
             {error && <p className="error-message">{error}</p>}
-            <button onClick={isGoogleLinked ? handleUnlinkGoogle : handleLinkGoogle}>
+            <button className="btn-link-acc" onClick={isGoogleLinked ? handleUnlinkGoogle : handleLinkGoogle}>
                 {isGoogleLinked ? 'Desvincular Google' : 'Vincular Google'}
             </button>
-            <button onClick={isMetaLinked ? handleUnlinkMeta : handleLinkMeta}>
+            <button className="btn-link-acc" onClick={isMetaLinked ? handleUnlinkMeta : handleLinkMeta}>
                 {isMetaLinked ? 'Desvincular Meta' : 'Vincular Meta'}
             </button>
             </center>

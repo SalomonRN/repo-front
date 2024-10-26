@@ -27,6 +27,7 @@ const ProposalDetail = () => {
     const [showStatusModal, setShowStatusModal] = useState(false);
     const [newStatus, setNewStatus] = useState('');  // Nuevo estado seleccionado
     const [reason, setReason] = useState(''); // Nueva razón para el cambio de estado
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Función para obtener la propuesta y los comentarios
     const fetchContentProposal = async () => {
@@ -166,6 +167,17 @@ const ProposalDetail = () => {
 
     // Función para cambiar el estado de la propuesta y manejar la publicación
     const handleStatusChange = async () => {
+
+        const loadingSwal = Swal.fire({
+            title: 'Cambiando estado...',
+            text: 'Por favor, espera un momento.',
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            },
+        });
+
         try {
             const token = localStorage.getItem('token');
             const formData = new FormData();
@@ -187,6 +199,8 @@ const ProposalDetail = () => {
                 body: formData,
             });
     
+            Swal.close();
+
             if (response.ok) {
                 const result = await response.json();
     
@@ -220,6 +234,7 @@ const ProposalDetail = () => {
                             text: `Error al publicar la propuesta: ${JSON.stringify(publishErrorData)}`,
                             icon: 'error'
                         });
+                        
                     }
                 }
     
@@ -233,6 +248,7 @@ const ProposalDetail = () => {
                 });
             }
         } catch (error) {
+            
             Swal.fire({
                 title: 'Error',
                 text: `Error al cambiar el estado de la propuesta`,
