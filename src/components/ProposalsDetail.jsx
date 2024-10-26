@@ -225,7 +225,7 @@ const ProposalDetail = () => {
                         const publishResult = await publishResponse.json();
                         Swal.fire({
                             title: 'Publicación exitosa',
-                            text: `Propuesta publicada correctamente: ${publishResult.message}`,
+                            text: `Propuesta publicada correctamente`,
                             icon: 'success'
                         });
                     } else {
@@ -248,6 +248,7 @@ const ProposalDetail = () => {
                     text: `Error al cambiar el estado`,
                     icon: 'error'
                 });
+                setShowStatusModal(false)
             }
         } catch (error) {
             
@@ -256,6 +257,7 @@ const ProposalDetail = () => {
                 text: `Error al cambiar el estado de la propuesta`,
                 icon: 'error'
             });
+            setShowStatusModal(false)
         }
     };
     
