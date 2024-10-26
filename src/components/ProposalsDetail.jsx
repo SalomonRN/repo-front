@@ -214,6 +214,17 @@ const ProposalDetail = () => {
     
                 // Publicar si el estado es "AP" y result.publish es true
                 if (newStatus === "AP" && result.publish === true) {
+
+                    const publishSwal = Swal.fire({
+                        title: 'Publicando propuesta...',
+                        text: 'Por favor, espera mientras se confirma la publicación.',
+                        allowEscapeKey: false,
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        },
+                    });
+
                     const publishResponse = await fetch(`${URL}/publish/${selectedProposal.id}`, {
                         method: 'GET',
                         headers: {
@@ -254,7 +265,7 @@ const ProposalDetail = () => {
             
             Swal.fire({
                 title: 'Error',
-                text: `Error al cambiar el estado de la propuesta`,
+                text: `Error al publicar la propuesta`,
                 icon: 'error'
             });
             setShowStatusModal(false)
