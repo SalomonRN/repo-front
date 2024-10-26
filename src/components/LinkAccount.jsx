@@ -23,7 +23,7 @@ const LinkAccount = () => {
         const code = params.get('code');
         const state = params.get('state');
 
-        if (code && state) {
+        if (code) {
             if (location.pathname.includes('google')) {
                 handleGoogleCallback(queryString);
             } else if (location.pathname.includes('meta')) {

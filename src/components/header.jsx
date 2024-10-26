@@ -39,6 +39,9 @@ const Header = ({ toggleMenu, menuOpen }) => {
             </button>
             <div className={`menu ${menuOpen ? 'open' : ''}`}>
                 <center>
+                    {isAdmin &&
+                        <button className="opc" onClick={() => navigate('/link_account')}>Vincular cuentas</button>
+                        }
                     <button className="opc" onClick={() => navigate('/')}>Home</button>
                     <button className="opc" onClick={handleBrainstormingRedirect}>Lluvia de ideas</button>
                     <button className="opc" onClick={handleProposalsRedirect}>Propuestas</button>
