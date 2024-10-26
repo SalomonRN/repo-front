@@ -93,7 +93,7 @@ const LinkAccount = () => {
     const handleMetaCallback = async (queryString) => {
     
         try {
-            const response = await fetch(`${URL}/auth/meta/?${queryString}`, {
+            const response = await fetch(`${URL}/auth/meta/${queryString}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Token ${token}`,
