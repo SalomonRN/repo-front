@@ -210,6 +210,7 @@ const ProposalDetail = () => {
                     text: `Estado cambiado correctamente a: ${newStatus}`,
                     icon: 'success'
                 });
+                setShowStatusModal(false)
     
                 // Publicar si el estado es "AP" y result.publish es true
                 if (newStatus === "AP" && result.publish === true) {
@@ -234,6 +235,7 @@ const ProposalDetail = () => {
                             text: `Error al publicar la propuesta: ${JSON.stringify(publishErrorData)}`,
                             icon: 'error'
                         });
+                        console.log(`error: ${publishErrorData.message}`)
                         
                     }
                 }
