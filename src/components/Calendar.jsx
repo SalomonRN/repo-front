@@ -444,7 +444,6 @@ function Calendar() {
                             <p><strong>Creado por:</strong> {selectedEvent.created_by}</p>
 
                             <div>
-                                <p><strong>Estado actual:</strong> {selectedEvent.status}</p>
                                 {isAdmin && (
                                     selectedEvent.status ? ( 
                                         <button className='btn-complete' disabled>

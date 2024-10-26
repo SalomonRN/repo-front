@@ -3,22 +3,22 @@ import axios from "axios";
 import Modal from "react-modal";
 import { useNavigate } from 'react-router-dom';
 import Swal from "sweetalert2";
-
+import URL from "./url";
 
 import Header from './header';
 
 const Brainstorming = () => {
     const token = localStorage.getItem('token');
     const isAdmin = localStorage.getItem('isAdmin');
-    const [menuHeight, setMenuHeight] = useState('0px'); 
+    const [menuHeight, setMenuHeight] = useState('0px');
     const [menuOpen, setMenuOpen] = useState(false);
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
-        setMenuHeight(menuOpen ? '0px' : '300px'); 
+        setMenuHeight(menuOpen ? '0px' : '300px');
     };
-    
-    const URL = 'https://django-tester.onrender.com';
-    
+
+
+
     const [ideas, setIdeas] = useState([]); // Estado para almacenar las ideas
     const [newIdea, setNewIdea] = useState(''); // Estado para la nueva idea 
     const [modalIsOpen, setModalIsOpen] = useState(false); // Estado para controlar si el modal está abierto
@@ -143,169 +143,163 @@ const Brainstorming = () => {
     // Maneja la acción de aceptar o rechazar la idea
     const handleAction = async () => {
         const formData = new FormData();
-
+    
+        // Manejo de acciones de rechazo
         if (action === 'RJ' && reason.trim() === '') {
             Swal.fire({
                 title: 'Error',
                 text: 'Debes proporcionar un motivo para rechazar la idea',
-                icon: 'Error'
+                icon: 'error'
             });
-            //alert('Debes proporcionar un motivo para rechazar la idea');
             return;
         }
-
-        if (selectedIdea) {
-            formData.append('id', selectedIdea.id);
-            formData.append('status', action); // 'AP' o 'RJ'
-            if (action === 'RJ') formData.append('reason', reason);
-
-            try {
-                const response = await fetch(`${URL}/project_management/change-idea-status/`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Token ${token}`,
-                    },
-                    body: formData,
-                });
-
-                if (!response.ok) {
-                    const errData = await response.json();
-                    const errorMessage = errData.message || `Error: ${response.status} - ${response.statusText}`;
-                    throw new Error(errorMessage);
-                }
-
-                Swal.fire({
-                    title: 'Éxito',
-                    text: `Idea ${action === 'AP' ? 'aceptada' : 'rechazada'} exitosamente`,
-                    icon: 'success'
-                });
-                //alert(`Idea ${action === 'AP' ? 'aceptada' : 'rechazada'} exitosamente`);
-
-                // Mover la idea a la lista de archivadas
-                setIdeas(prevIdeas => prevIdeas.filter(idea => idea.id !== selectedIdea.id));
-                setArchivedIdeas(prevArchived => [...prevArchived, { ...selectedIdea, status: action }]);
-
-                closeModal();
-            } catch (error) {
-                console.error(`Error al ${action === 'AP' ? 'aceptar' : 'rechazar'} la idea:`, error);
-                Swal.fire({
-                    title: 'Error',
-                    text: `Error al ${action === 'AP' ? 'aceptar' : 'rechazar'} la idea`,
-                    icon: 'error'
-                });
-                //setError(error.message);
-            }
-
-        } else if (action === 'edit') {
-            if (selectedIdea && selectedIdea.idea) {
-
-                formData.append('idea', selectedIdea.idea);
-
+    
+        if (action === 'RJ' || action === 'AP') {
+            if (selectedIdea) {
+                formData.append('id', selectedIdea.id);
+                formData.append('status', action); // 'AP' o 'RJ'
+                if (action === 'RJ') formData.append('reason', reason);
+    
                 try {
-                    const response = await fetch(`${URL}/project_management/ideas/${selectedIdea.id}/`, {
-                        method: 'PUT',
+                    const response = await fetch(`${URL}/project_management/change-idea-status/`, {
+                        method: 'POST',
                         headers: {
                             'Authorization': `Token ${token}`,
                         },
                         body: formData,
                     });
-
+    
                     if (!response.ok) {
                         const errData = await response.json();
-
-
-                        console.error("Error de respuesta del servidor:", errData);
-                        const errorMessage = errData || `Error: ${response.status} - ${response.statusText}`;
+                        const errorMessage = errData.message || `Error: ${response.status} - ${response.statusText}`;
                         throw new Error(errorMessage);
                     }
-
+    
                     Swal.fire({
                         title: 'Éxito',
-                        text: `Idea editada con éxito`,
+                        text: `Idea ${action === 'AP' ? 'aceptada' : 'rechazada'} exitosamente`,
                         icon: 'success'
                     });
-                    //alert('Idea editada con exito')
-                    console.log("Idea editada correctamente:");
-                    const updatedIdeas = ideas.map(idea =>
-                        idea.id === selectedIdea.id ? { ...idea, idea: selectedIdea.idea } : idea
-                    );
-                    setIdeas(updatedIdeas); // Actualiza la lista de ideas
+    
+
+                    setIdeas(prevIdeas => prevIdeas.filter(idea => idea.id !== selectedIdea.id));
+                    setArchivedIdeas(prevArchived => [...prevArchived, { ...selectedIdea, status: action }]);
                     closeModal();
+                    setReason('');
                 } catch (error) {
-                    console.error("Error al editar la idea:", error);
+                    console.error(`Error al ${action === 'AP' ? 'aceptar' : 'rechazar'} la idea:`, error);
                     Swal.fire({
                         title: 'Error',
-                        text: `No eres el creador de esta idea`,
+                        text: `Error al ${action === 'AP' ? 'aceptar' : 'rechazar'} la idea: ${error.message}`,
                         icon: 'error'
                     });
-                    //alert('No eres el creador de esta idea')
-                }
-            }
-
-
-        } else if (action === 'delete') {
-            if (selectedIdea) {
-                try {
-                    console.log("ID de la idea seleccionada:", selectedIdea.id);
-
-                    const response = await fetch(`${URL}/project_management/ideas/${selectedIdea.id}/`, {
-                        method: 'DELETE',
-                        headers: {
-                            'Authorization': `Token ${token}`,
-                        },
-
-                    });
-
-                    if (!response.ok) {
-                        const errData = await response.json();
-                        console.error("Error de respuesta del servidor:", errData);
-                        const errorMessage = errData.message || errData.detail || `Error: ${response.status} - ${response.statusText}`;
-                        throw new Error(errorMessage);
-                    }
-
-                    Swal.fire({
-                        title: 'Éxito',
-                        text: `Idea eliminada exitosamente`,
-                        icon: 'success'
-                    });
-
-                    //alert('Idea eliminada con exito')
-                    console.log("Idea eliminada correctamente:");
-                    setIdeas(ideas.filter(i => i.id !== selectedIdea.id));
-                    closeModal();
-                } catch (error) {
-                    console.error("Error al eliminar la idea:", error);
-                    Swal.fire({
-                        title: 'Error',
-                        text: `No eres el creador de esta idea`,
-                        icon: 'error'
-                    });
-                    //alert('No eres el creador de esta idea')
 
                 }
-            } else {
-                Swal.fire({
-                    title: 'Error',
-                    text: `No se ha seleccionado ninguna idea para eliminar`,
-                    icon: 'error'
-                });
-                //alert("No se seleccionó ninguna idea para eliminar.");
+                return; 
             }
         }
-
+    
+        // editar
+        if (action === 'edit' && selectedIdea) {
+            formData.append('id', selectedIdea.id);
+            formData.append('idea', selectedIdea.idea); 
+    
+            try {
+                const response = await fetch(`${URL}/project_management/ideas/${selectedIdea.id}/`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Token ${token}`,
+                    },
+                    body: formData,
+                });
+    
+                if (!response.ok) {
+                    const errData = await response.json();
+                    console.error("Error de respuesta del servidor:", errData);
+                    const errorMessage = errData.message || `Error: ${response.status} - ${response.statusText}`;
+                    throw new Error(errorMessage);
+                }
+    
+                Swal.fire({
+                    title: 'Éxito',
+                    text: `Idea editada con éxito`,
+                    icon: 'success'
+                });
+    
+                const updatedIdeas = ideas.map(idea =>
+                    idea.id === selectedIdea.id ? { ...idea, idea: selectedIdea.idea } : idea
+                );
+                setIdeas(updatedIdeas); 
+                closeModal();
+            } catch (error) {
+                console.error("Error al editar la idea:", error);
+                Swal.fire({
+                    title: 'Error',
+                    text: `No eres el creador de esta idea: ${error.message}`,
+                    icon: 'error'
+                });
+                closeModal();
+            }
+            return; 
+        }
+    
+        //eliminar
+        if (action === 'delete' && selectedIdea) {
+            try {
+                console.log("ID de la idea seleccionada:", selectedIdea.id);
+    
+                const response = await fetch(`${URL}/project_management/ideas/${selectedIdea.id}/`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Token ${token}`,
+                    },
+                });
+    
+                if (!response.ok) {
+                    const errData = await response.json();
+                    console.error("Error de respuesta del servidor:", errData);
+                    const errorMessage = errData.message || errData.detail || `Error: ${response.status} - ${response.statusText}`;
+                    throw new Error(errorMessage);
+                }
+    
+                Swal.fire({
+                    title: 'Éxito',
+                    text: `Idea eliminada exitosamente`,
+                    icon: 'success'
+                });
+    
+                setIdeas(ideas.filter(i => i.id !== selectedIdea.id));
+                closeModal();
+            } catch (error) {
+                console.error("Error al eliminar la idea:", error);
+                Swal.fire({
+                    title: 'Error',
+                    text: `No eres el creador de esta idea: ${error.message}`,
+                    icon: 'error'
+                });
+                closeModal();
+            }
+        } else {
+            Swal.fire({
+                title: 'Error',
+                text: `No se ha seleccionado una opción válida`,
+                icon: 'error'
+            });
+        }
     };
-
+    
+    
     return (
         <div className={`brainstorming-container ${menuOpen ? 'shifted' : ''}`} style={{ marginTop: menuHeight }}>
             <div className="header-container">
                 <Header toggleMenu={toggleMenu} menuOpen={menuOpen} />
             </div>
             <div className="brainstorming-header">
-            <h1 className="title-brainstorming">Lluvia de ideas</h1>
-            <button className="archive-button" onClick={() => navigate('/ideas-archive')}>
-                Ideas Aceptadas/Rechazadas
-            </button>
-        </div>
+                <h1 className="title-brainstorming">Lluvia de ideas</h1>
+                <button className="archive-button" onClick={() => navigate('/ideas-archive')}>
+                    Ideas Aceptadas/Rechazadas
+                </button>
+            </div>
             <center>
                 <textarea
                     className="textarea-brainstorming"

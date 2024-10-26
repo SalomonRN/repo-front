@@ -28,6 +28,7 @@ const ProposalsForms = () => {
     const [proposedBy, setProposedBy] = useState('');
     const [files, setFiles] = useState([]);
     const [error, setError] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Opciones para el multiselect de redes sociales
     const socialMediaOptions = [
@@ -183,7 +184,19 @@ const ProposalsForms = () => {
 
         for (let i = 0; i < files.length; i++) {
             formData.append('files', files[i]);
+            
         }
+
+        setIsSubmitting(true);
+
+        const loadingSwal = Swal.fire({
+            title: 'Enviando...',
+            text: 'Por favor, espera mientras se envía tu propuesta.',
+            didOpen: () => {
+                Swal.showLoading(); 
+            },
+            allowOutsideClick: false, 
+        });
 
         // Depuración: imprimir el contenido de formData
         for (let [key, value] of formData.entries()) {
@@ -215,6 +228,9 @@ const ProposalsForms = () => {
                 icon: 'warning'
             });
             //alert('Hubo un error al enviar la propuesta: ' + (error.response ? error.response.data : error.message));
+        }finally{
+            setIsSubmitting(false);
+            Swal.close();
         }
     };
 
@@ -275,7 +291,10 @@ const ProposalsForms = () => {
                                     <label>Archivos:</label>
                                     <input className='input-btn-f' type="file" multiple onChange={handleFilesChange} />
                                 </div>
-                                <button className="btn-pform" type="submit">Enviar Propuesta</button>
+                                <button className="btn-pform" type="submit" disabled={isSubmitting}>
+                                    {isSubmitting ? 'Enviando...' : 'Enviar Propuesta'}
+                                </button>
+                                
                             </center>
                         </div>
                     </form>

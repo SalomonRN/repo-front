@@ -194,7 +194,7 @@ const ProposalDetailCm = () => {
                 return;
             }
 
-            if (!files || files.length === 0) {
+            {/* if (!files || files.length === 0) {
                 Swal.fire({
                     title: 'Warning',
                     text: `Debes seleccionar al menos un archivo para subir`,
@@ -202,7 +202,7 @@ const ProposalDetailCm = () => {
                 });
                 //alert('Debes seleccionar al menos un archivo para subir.');
                 return;
-            }
+            } */}
 
             const selectedFileTypes = Array.from(files).map(file => file.type);
             const hasVideo = selectedFileTypes.some(type => type.startsWith('video'));
