@@ -1,12 +1,21 @@
 import { useContext } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+
+
+const publicRoutes = ['/login', '/psw_reset', '/about'];
 
 const ProtectedRoute = ({ requiredAdmin, allowBothRoles }) => {
     const { token, isAdmin } = useContext(AuthContext);
+    const location = useLocation();
 
     console.log("Token:", token);
     console.log("User is admin:", isAdmin);
+
+    // Si la ruta actual está en la lista de rutas públicas, permite el acceso
+    if (publicRoutes.includes(location.pathname)) {
+        return <Outlet />;
+    }
 
     // Si no hay token, redirige al login
     if (!token) {

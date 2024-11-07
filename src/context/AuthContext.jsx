@@ -19,10 +19,8 @@ export const AuthProvider = ({ children }) => {
         if (storedToken) {
             setToken(storedToken);
             setIsAdmin(storedIsAdmin);
-        } else {
-            navigate('/login');
-        }
-
+        } 
+          
         const timeout = setTimeout(() => {
             setLoading(false);
         }, 2000);

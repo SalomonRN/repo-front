@@ -15,8 +15,8 @@ const ProposalDetailCm = () => {
         setMenuHeight(menuOpen ? '0px' : '300px');
     };
 
-    
-    
+
+
     const { id } = useParams();
     const [loading, setLoading] = useState(true);
     const [comments, setComments] = useState([]);
@@ -163,38 +163,38 @@ const ProposalDetailCm = () => {
         return new Promise((resolve, reject) => {
             const videoElement = document.createElement('video');
             videoElement.src = URL.createObjectURL(file);
-            
+
             videoElement.onloadedmetadata = () => {
                 const duration = videoElement.duration; // Duración en segundos
                 const aspectRatio = videoElement.videoWidth / videoElement.videoHeight;
                 const isVertical = aspectRatio < 1; // Verificar si el video es vertical
-                
+
                 if (duration <= 60 && isVertical) {
                     resolve(true);
                 } else {
                     reject(false);
                 }
             };
-            
+
             videoElement.onerror = () => reject(false);
         });
     };
 
     const handleEditProposal = async () => {
-        try {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                Swal.fire({
-                    title: 'Error',
-                    text: `No tienes token de acceso. Inicia sesión primero`,
-                    icon: 'error'
-                });
-                //alert('No tienes token de acceso. Inicia sesión primero.');
-                navigate('/login');
-                return;
-            }
 
-            {/* if (!files || files.length === 0) {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            Swal.fire({
+                title: 'Error',
+                text: `No tienes token de acceso. Inicia sesión primero`,
+                icon: 'error'
+            });
+            //alert('No tienes token de acceso. Inicia sesión primero.');
+            navigate('/login');
+            return;
+        }
+
+        {/* if (!files || files.length === 0) {
                 Swal.fire({
                     title: 'Warning',
                     text: `Debes seleccionar al menos un archivo para subir`,
@@ -204,6 +204,7 @@ const ProposalDetailCm = () => {
                 return;
             } */}
 
+        if (files) {
             const selectedFileTypes = Array.from(files).map(file => file.type);
             const hasVideo = selectedFileTypes.some(type => type.startsWith('video'));
             const hasImage = selectedFileTypes.some(type => type.startsWith('image'));
@@ -282,19 +283,21 @@ const ProposalDetailCm = () => {
                     }
                 }
             }
+        }
+        const formData = new FormData();
+        formData.append('title', editedProposal.title || '');
+        formData.append('description', editedProposal.description || '');
+        formData.append('social_media', editedProposal.social_media || '');
+        formData.append('type', editedProposal.type || '');
+        formData.append('edited_by', editedProposal.edited_by || '');
+        formData.append('copy', editedProposal.copy || '');
 
-            const formData = new FormData();
-            formData.append('title', editedProposal.title || '');
-            formData.append('description', editedProposal.description || '');
-            formData.append('social_media', editedProposal.social_media || '');
-            formData.append('type', editedProposal.type || '');
-            formData.append('edited_by', editedProposal.edited_by || '');
-            formData.append('copy', editedProposal.copy || '');
-
+        if (files) {
             for (let i = 0; i < files.length; i++) {
                 formData.append('files', files[i]);
             }
-
+        }
+        try {
             const response = await fetch(`${URL}/content_proposal/${selectedProposal.id}/`, {
                 method: 'PUT',
                 headers: {
@@ -302,6 +305,7 @@ const ProposalDetailCm = () => {
                 },
                 body: formData,
             });
+
 
             if (response.ok) {
                 const updatedProposal = await response.json();
@@ -320,18 +324,21 @@ const ProposalDetailCm = () => {
                     text: `Error al actualizar la propuesta`,
                     icon: 'error'
                 });
-                
+
                 //alert(`Error al actualizar la propuesta: ${JSON.stringify(errorData)}`);
             }
         } catch (error) {
-        Swal.fire({
-                    title: 'Error',
-                    text: `Error al actualizar la propuesta. Inténtalo nuevamente`,
-                    icon: 'error'
-                });
-        console.log(`${error.message}`)        
-            //alert('Error al actualizar la propuesta. Inténtalo nuevamente.');
+            Swal.fire({
+                title: 'Error',
+                text: `Error al actualizar la propuesta. Inténtalo nuevamente`,
+                icon: 'error'
+            });
         }
+
+
+        //alert('Error al actualizar la propuesta. Inténtalo nuevamente.');
+
+
     };
 
     const handleEditChange = (e) => {
@@ -421,8 +428,8 @@ const ProposalDetailCm = () => {
                     {/* drive */}
                     <div className="proposal-files-ad">
                         <center>
-                        <h2 className='vid-title'>Archivos Adjuntos</h2>
-                        {renderFileIframes(selectedProposal.url)}
+                            <h2 className='vid-title'>Archivos Adjuntos</h2>
+                            {renderFileIframes(selectedProposal.url)}
                         </center>
                     </div>
 

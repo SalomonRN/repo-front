@@ -15,16 +15,18 @@ const PasswordReset = () => {
 
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
+    const formdata = new FormData();
+    formdata.append('email', email)
     try {
       const response = await fetch(`${URL}/auth/reset-password/`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
+        body: formdata,
       });
 
       if (!response.ok) {
+        console.log('------------')
+        const data = await response.json();
+        console.log(data)
         throw new Error('Error al enviar el correo');
       }
 
@@ -65,13 +67,13 @@ const PasswordReset = () => {
   };
 
   return (
-    <div className='psw-container'>
+    <div className='psw-container'><center>
       <h2>{isEmailSent ? 'Restablecer Contraseña' : 'Solicitar Restablecimiento de Contraseña'}</h2>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       {!isEmailSent ? (
         <form onSubmit={handleEmailSubmit}>
           <label>
-            Correo Electrónico:
+            Correo Electrónico: 
             <input
               type="email"
               value={email}
@@ -82,28 +84,11 @@ const PasswordReset = () => {
           <button type="submit">Enviar Correo</button>
         </form>
       ) : (
-        <form onSubmit={handlePasswordReset}>
-          <label>
-            Nueva Contraseña:
-            <input
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              required
-            />
-          </label>
-          <label>
-            Confirmar Contraseña:
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
-          </label>
-          <button type="submit">Restablecer Contraseña</button>
-        </form>
+        <div className='confirm-container'>
+          <h1>Se te ha enviado un link al correo</h1>
+        </div>
       )}
+      </center>
     </div>
   );
 };

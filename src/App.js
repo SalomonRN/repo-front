@@ -14,10 +14,12 @@ import BrainStormingCM from './components/BrainStormingCM';
 import About from './components/About';
 import LinkAccount from './components/LinkAccount';
 import PasswordReset from './components/PasswordReset';
+import PasswordResetConfirm from './components/PasswordResetConfirm';
 import Unauthorized from './components/Unauthorized';
 import GoogleCallback from './components/GoogleCalback';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
+
 
 function App() {
   return (
@@ -29,6 +31,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/about" element={<About />} />
             <Route path="/psw_reset" element={<PasswordReset />} />
+            <Route path="/auth/password_reset_confirm/:userId/:token" element={<PasswordResetConfirm />} />
 
             {/* Rutas protegidas para todos los usuarios con token */}
             <Route element={<ProtectedRoute allowBothRoles={true} />}>

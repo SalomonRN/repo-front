@@ -102,12 +102,12 @@ const Login = () => {
                                 Ingresar
                             </button>
                         </form> 
-                        {/*<p className='forgot-password'>
+                        <p className='forgot-password'>
                             ¿Olvidaste tu contraseña?{' '}
                             <Link to="/psw_reset" className='link-reset'>
                                 Haz clic aquí
                             </Link>
-                        </p> */}
+                        </p> 
                     </center>
                 </div>
             </div>
