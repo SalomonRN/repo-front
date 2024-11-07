@@ -320,14 +320,16 @@ const ProposalDetailCm = () => {
                     text: `Error al actualizar la propuesta`,
                     icon: 'error'
                 });
+                
                 //alert(`Error al actualizar la propuesta: ${JSON.stringify(errorData)}`);
             }
         } catch (error) {
         Swal.fire({
                     title: 'Error',
-                    text: `Error al actualizar la propuesta. Inténtalo nuevamente`,
+                    text: `Error al actualizar la propuesta. Inténtalo nuevamente: ${error.message}`,
                     icon: 'error'
                 });
+        console.log(`${error.message}`)        
             //alert('Error al actualizar la propuesta. Inténtalo nuevamente.');
         }
     };

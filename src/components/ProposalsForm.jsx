@@ -229,7 +229,7 @@ const ProposalsForms = () => {
             console.error('Error al enviar la propuesta:', error.response ? error.response.data : error.message);
             Swal.fire({
                 title: 'Error',
-                text: `Hubo un error al enviar la propuesta: ${error.message}`,
+                text: `Hubo un error al enviar la propuesta `,
                 icon: 'warning'
             });
             //alert('Hubo un error al enviar la propuesta: ' + (error.response ? error.response.data : error.message));
