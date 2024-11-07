@@ -27,7 +27,7 @@ function App() {
       <div className="App">
         <header className="App-header">
           <Routes>
-            <Route path="/" element={<Home />} />
+
             <Route path="/login" element={<Login />} />
             <Route path="/about" element={<About />} />
             <Route path="/psw_reset" element={<PasswordReset />} />
@@ -35,10 +35,11 @@ function App() {
 
             {/* Rutas protegidas para todos los usuarios con token */}
             <Route element={<ProtectedRoute allowBothRoles={true} />}>
+              <Route path="/" element={<Home />} />
               <Route path="/calendar" element={<Calendar />} />
               <Route path="/ideas-archive" element={<IdeasArchive />} />
               <Route path="/proposals_form" element={<ProposalsForms />} />
-              
+
             </Route>
 
             {/* Rutas protegidas solo para admins */}
@@ -49,7 +50,7 @@ function App() {
               <Route path="/content_proposal/:id" element={<ProposalDetail />} />
               <Route path="/auth/google/oauth2callback" element={<LinkAccount />} />
               <Route path="/auth/meta" element={<LinkAccount />} />
-              
+
             </Route>
 
             {/* Rutas protegidas solo para CM */}
@@ -57,7 +58,7 @@ function App() {
               <Route path="/brainstormingCM" element={<BrainStormingCM />} />
               <Route path="/proposals_cm" element={<ProposalsListCm />} />
               <Route path="/content_proposal_Cm/:id" element={<ProposalDetailCm />} />
-        
+
             </Route>
 
             {/* Ruta de acceso no autorizado */}
