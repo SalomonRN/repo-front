@@ -326,7 +326,7 @@ const ProposalDetailCm = () => {
         } catch (error) {
         Swal.fire({
                     title: 'Error',
-                    text: `Error al actualizar la propuesta. Inténtalo nuevamente: ${error.message}`,
+                    text: `Error al actualizar la propuesta. Inténtalo nuevamente`,
                     icon: 'error'
                 });
         console.log(`${error.message}`)        
