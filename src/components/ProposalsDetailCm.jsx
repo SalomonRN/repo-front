@@ -355,7 +355,7 @@ const ProposalDetailCm = () => {
     const handleSocialMediaChange = (selectedOptions) => {
         setEditedProposal({
             ...editedProposal,
-            social_media: selectedOptions.map(option => option.value).join(', '),
+            social_media: selectedOptions.map(option => option.value).join(','),
         });
     };
 
@@ -380,7 +380,7 @@ const ProposalDetailCm = () => {
     const renderFileIframes = (fileIds) => {
         if (!fileIds) return null;
 
-        const ids = fileIds.split(',');
+        const ids = fileIds.split(', ');
         //console.log('Rendering Iframes for IDs:', ids); // Agrega este log para verificar
 
         return ids.map((fileId) => (
@@ -495,7 +495,7 @@ const ProposalDetailCm = () => {
                                 className='select-rs-d'
                                 isMulti
                                 options={socialMediaOptions}
-                                value={editedProposal.social_media?.split(', ').map(value => ({ value, label: value })) || []}
+                                value={editedProposal.social_media?.split(',').map(value => ({ value, label: value })) || []}
                                 onChange={handleSocialMediaChange}
                             /><br />
                             <br /><label>Descripción:</label>
