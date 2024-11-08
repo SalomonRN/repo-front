@@ -53,6 +53,7 @@ body, html {
   text-align: justify;
   margin-left: 70px;
   margin-right: 80px;
+  margin-bottom: 90px;
 }
 
 /* Botones de autenticación */
@@ -142,6 +143,33 @@ body, html {
   text-align: left;
   animation: modalEnter 0.5s ease-out;
 }
+
+.contact-info {
+  padding: 20px;
+  color: rgba(255, 255, 255, 0.87);
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-size: 18px;
+  text-align: center;
+  margin-top: 20px;
+  border-top: 1px solid #ddd;
+  background: #000000ab;
+  border-radius: 8px;
+}
+
+.contact-info h2 {
+  color: rgba(255, 255, 255, 0.87);
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.contact-info p {
+  margin: 5px 0;
+  color: rgba(255, 255, 255, 0.87);
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-size: 18px;
+}
+
 
 @keyframes modalEnter {
   from {
