@@ -177,7 +177,7 @@ const ProposalsForms = () => {
         const formData = new FormData();
         formData.append('title', title);
         formData.append('type', type);
-        formData.append('social_media', socialMedia.join(', ')); // Agrega las redes sociales seleccionadas
+        formData.append('social_media', socialMedia.join(',')); // Agrega las redes sociales seleccionadas
         formData.append('copy', copy);
         formData.append('description', description);
         formData.append('proposed_by', proposedBy);
