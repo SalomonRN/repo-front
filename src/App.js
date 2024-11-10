@@ -50,6 +50,7 @@ function App() {
               <Route path="/content_proposal/:id" element={<ProposalDetail />} />
               <Route path="/auth/google/oauth2callback" element={<LinkAccount />} />
               <Route path="/auth/meta" element={<LinkAccount />} />
+              <Route path="/auth/tiktok/oauth2callback" element={<LinkAccount />} />
 
             </Route>
 

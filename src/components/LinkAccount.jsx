@@ -31,6 +31,7 @@ const LinkAccount = () => {
         const params = new URLSearchParams(queryString);
         const code = params.get('code');
         const state = params.get('state');
+        const scopes = params.get('scopes');
 
         if (code) {
             if (location.pathname.includes('google')) {
@@ -155,7 +156,13 @@ const LinkAccount = () => {
     };
 
     const handleTikTokCallback = async (queryString) => {
-        const url = `${URL}/auth/tiktok/oauth2callback/?${queryString}`;
+
+        if (!token) {
+            navigate('/login'); 
+            return;
+        }
+
+        const url = `${URL}/auth/tiktok/oauth2callback/${queryString}`;
         try {
             const response = await fetch(url, {
                 method: 'GET',
