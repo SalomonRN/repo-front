@@ -3,16 +3,17 @@
   src: url('../font/jerseyr.ttf') format('truetype');
 }
 
-body, html {
+body, html{
   margin: 0;
   padding: 0;
   height: 100%;
+
 }
 
 .home-container {
   text-align: center;
   color: white;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -34,12 +35,10 @@ body, html {
   z-index: 1;
 }
 
-
-
 .title-home {
   font-size: 3rem;
   z-index: 2;
-  margin-top: 0;
+  margin-top: 180px;
   font-family: 'JerseyR', sans-serif;
   font-weight: lighter;
 }
@@ -152,8 +151,9 @@ body, html {
   text-align: center;
   margin-top: 20px;
   border-top: 1px solid #ddd;
-  background: #000000ab;
+  background: #000000d8;
   border-radius: 8px;
+  z-index: 3;
 }
 
 .contact-info h2 {

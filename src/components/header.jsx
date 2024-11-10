@@ -7,7 +7,9 @@ const Header = ({ toggleMenu, menuOpen }) => {
 
 
     const navigate = useNavigate();
-    const { logout, isAdmin } = useContext(AuthContext);
+    const { logout, isAdmin, username } = useContext(AuthContext);
+    const [userMenuOpen, setUserMenuOpen] = useState(false);
+
     const isLoggedIn = !!localStorage.getItem('token');
 
     const handleLogout = () => {
@@ -31,6 +33,12 @@ const Header = ({ toggleMenu, menuOpen }) => {
         }
     }
 
+    const toggleUserMenu = () => {
+        setUserMenuOpen(!userMenuOpen);
+    };
+
+
+
 
     return (
         <div className="header">
@@ -41,7 +49,7 @@ const Header = ({ toggleMenu, menuOpen }) => {
                 <center>
                     {isAdmin &&
                         <button className="opc" onClick={() => navigate('/link_account')}>Vincular cuentas</button>
-                        }
+                    }
                     <button className="opc" onClick={() => navigate('/')}>Home</button>
                     <button className="opc" onClick={handleBrainstormingRedirect}>Lluvia de ideas</button>
                     <button className="opc" onClick={handleProposalsRedirect}>Propuestas</button>
@@ -49,8 +57,20 @@ const Header = ({ toggleMenu, menuOpen }) => {
                     <button className="opc" onClick={() => navigate('/calendar')}>Calendario</button>
                     <button className="opc" onClick={() => navigate('/about')}>About</button>
                     {/*<button className="opc" onClick={() => navigate('/link_account')}>Ir a Vinvular cuentas</button>*/}
+
                     {isLoggedIn && (
-                        <button className="opc" onClick={handleLogout}>Cerrar sesión</button>
+
+                        <div className='user-menu-container'>
+                            <button className='user-btn' onClick={toggleUserMenu}>
+                                {isAdmin ? '👑' : '🛠️'} {username}
+                            </button>
+                            {userMenuOpen && (
+                                <div className='user-dropdown'>
+                                    <button className="dropdown-option" onClick={() => navigate('/profile')}>Perfil</button>
+                                    <button className="dropdown-option" onClick={handleLogout}>Cerrar sesión</button>
+                                </div>
+                            )}
+                        </div>
                     )}
                 </center>
             </div>

@@ -45,9 +45,11 @@ const Login = () => {
             if (response.status === 200) {
                 const token = response.data.token;
                 const isAdmin = response.data.is_admin;
+                const username = formData.username;
                 console.log('Token recibido:', token);
                 console.log('Admin:', isAdmin)
-                login(token, isAdmin); // Guarda el token en el contexto
+                console.log('Username:', username)
+                login(token, isAdmin, username); // Guarda el token en el contexto
                 navigate('/'); 
             } else {
                 console.error('Error al iniciar sesión:', response.data.message);
@@ -61,9 +63,9 @@ const Login = () => {
         } catch (error) {
             console.error('Error al intentar iniciar sesión:', error);
             Swal.fire({
-                title: 'Éxito',
-                text: `Error de red: no se pudo conectar al servidor.`,
-                icon: 'success'
+                title: 'Error',
+                text: `Verifique sus credenciales`,
+                icon: 'error'
             });
             //alert('Error de red: no se pudo conectar al servidor.');
         }

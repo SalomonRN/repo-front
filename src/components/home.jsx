@@ -6,10 +6,15 @@ import Header from "./header";
 
 const Home = () => {
     const [menuOpen, setMenuOpen] = useState(false);
+    const [menuHeight, setMenuHeight] = useState('0px');
     const [showTutorial, setShowTutorial] = useState(false);
     const [hideTutorialPermanently, setHideTutorialPermanently] = useState(false);
     const navigate = useNavigate();
 
+    const toggleMenu = () => {
+        setMenuOpen(!menuOpen);
+        setMenuHeight(menuOpen ? '0px' : '400px');
+    };
 
     useEffect(() => {
         const hideTutorial = localStorage.getItem("hideTutorial");
@@ -18,9 +23,7 @@ const Home = () => {
         }
     }, []);
 
-    const toggleMenu = () => {
-        setMenuOpen(!menuOpen);
-    };
+    
 
     const closeTutorial = () => {
         if (hideTutorialPermanently) {
@@ -34,7 +37,7 @@ const Home = () => {
     };
 
     return (
-        <div className={`home-container ${menuOpen ? 'shifted' : ''}`}>
+        <div className={`home-container ${menuOpen ? 'shifted' : ''}`} style={{ marginTop: menuHeight }}>
             <div className="header-container">
                 <Header toggleMenu={toggleMenu} menuOpen={menuOpen} />
             </div>
