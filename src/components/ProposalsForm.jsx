@@ -11,7 +11,7 @@ import Swal from "sweetalert2";
 
 const ProposalsForms = () => {
     const navigate = useNavigate();
-    const { token } = useContext(AuthContext);
+    const { token, isAdmin } = useContext(AuthContext);
     const [menuHeight, setMenuHeight] = useState('0px');
     const [menuOpen, setMenuOpen] = useState(false);
     const toggleMenu = () => {
@@ -220,7 +220,11 @@ const ProposalsForms = () => {
                 timer: 2000, // Duración del SweetAlert (en milisegundos)
                 timerProgressBar: true,
                 willClose: () => {
-                    navigate('/proposals'); // Redirige después de que se cierre el SweetAlert
+                    if (isAdmin) {
+                        navigate('/proposals'); // Redirige después de que se cierre el SweetAlert
+                    } else {
+                        navigate('/proposals_cm'); 
+                    }
                 }
             });
             //alert('Propuesta enviada con éxito');

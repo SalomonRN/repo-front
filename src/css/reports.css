@@ -1,0 +1,124 @@
+/* Estilos generales para el contenedor */
+.reports-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 30px;
+  background: #f4f4f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.6s ease-in-out;
+  margin: 0 auto 100px auto; /* Centramos y eliminamos margen derecho e izquierdo */
+  font-family: "JerseyR", sans-serif;
+  font-weight: lighter;
+  width: 80%; /* Ancho fijo para tamaños medianos */
+}
+
+@media (max-width: 1200px) {
+  .reports-container {
+    width: 90%; /* Más ancho en pantallas grandes */
+  }
+}
+
+@media (max-width: 768px) {
+  .reports-container {
+    width: 95%; /* Ancho mayor en pantallas más pequeñas */
+    padding: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .reports-container {
+    width: 100%; /* Ocupa todo el ancho en pantallas muy pequeñas */
+    padding: 15px;
+  }
+}
+
+/* Título principal */
+.title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+  color: #333;
+  margin-bottom: 40px;
+  animation: slideInFromLeft 1s ease-out;
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 2rem; /* Tamaño de fuente menor para pantallas medianas */
+  }
+}
+
+@media (max-width: 576px) {
+  .title {
+    font-size: 1.5rem; /* Tamaño de fuente menor para pantallas pequeñas */
+  }
+}
+
+/* Estilos para las tarjetas de cada categoría */
+.category-card {
+  background-color: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transform: scale(0.98);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+
+@media (max-width: 576px) {
+  .category-card {
+    padding: 15px; /* Ajuste de padding en pantallas pequeñas */
+  }
+}
+
+/* Estilos para los botones dentro de las categorías */
+.pdf-btn {
+  background-color: #616060;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  font-size: 16px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  display: inline-block;
+  margin: 10px 5px; /* Pequeño margen entre botones */
+  width: 40%; /* Ancho estándar para botones */
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .pdf-btn {
+    width: 45%; /* Ajuste para pantallas medianas */
+  }
+}
+
+@media (max-width: 576px) {
+  .pdf-btn {
+    width: 100%; /* Ancho completo en pantallas pequeñas */
+    padding: 10px 20px;
+  }
+}
+
+/* Efectos adicionales y ajustes de separación en las categorías */
+.category-card h2 {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #444;
+  margin-bottom: 15px;
+  transition: color 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .category-card h2 {
+    font-size: 1.4rem; /* Ajuste de tamaño para pantallas medianas */
+  }
+}
+
+@media (max-width: 576px) {
+  .category-card h2 {
+    font-size: 1.2rem; /* Ajuste de tamaño para pantallas pequeñas */
+  }
+}

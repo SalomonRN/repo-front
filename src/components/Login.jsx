@@ -1,120 +1,139 @@
-import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios'; // Importar axios para hacer solicitudes
-import { AuthContext } from '../context/AuthContext'; // Importar el contexto
-import '../css/login.css';
-import imagen from '../images/logologin.png';
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios"; // Importar axios para hacer solicitudes
+import { AuthContext } from "../context/AuthContext"; // Importar el contexto
+import "../css/login.css";
+import imagen from "../images/logologin.png";
 import URL from "./url";
-import Swal from 'sweetalert2';
-import { Link } from 'react-router-dom';
+import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const { login } = useContext(AuthContext); // Usar login del contexto
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+  });
+  const [error, setError] = useState(null); // Para manejar errores
 
-
-
-    const navigate = useNavigate();
-    const { login } = useContext(AuthContext); // Usar login del contexto
-    const [formData, setFormData] = useState({
-        username: '',
-        password: ''
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
     });
-    const [error, setError] = useState(null); // Para manejar errores
+  };
 
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-    
-        const data = new URLSearchParams(); // Usar URLSearchParams para formatear correctamente los datos
-        data.append('username', formData.username);
-        data.append('password', formData.password);
-    
+    const data = new URLSearchParams(); // Usar URLSearchParams para formatear correctamente los datos
+    data.append("username", formData.username);
+    data.append("password", formData.password);
+
+    try {
+      const response = await axios.post(`${URL}/auth/login/`, data, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded", // Asegúrate de que el tipo de contenido sea correcto
+        },
+        withCredentials: true,
+      });
+
+      if (response.status === 200) {
+        const token = response.data.token;
+        const isAdmin = response.data.is_admin;
+        const username = formData.username;
+        console.log("Token recibido:", token);
+        console.log("Admin:", isAdmin);
+        console.log("Username:", username);
+        login(token, isAdmin, username); // Guarda el token en el contexto
+
+        // Verificar el estado de términos y condiciones
         try {
-            const response = await axios.post(`${URL}/auth/login/`, data, {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded', // Asegúrate de que el tipo de contenido sea correcto
-                },
-                withCredentials: true,
-            });
-    
-            if (response.status === 200) {
-                const token = response.data.token;
-                const isAdmin = response.data.is_admin;
-                const username = formData.username;
-                console.log('Token recibido:', token);
-                console.log('Admin:', isAdmin)
-                console.log('Username:', username)
-                login(token, isAdmin, username); // Guarda el token en el contexto
-                navigate('/'); 
-            } else {
-                console.error('Error al iniciar sesión:', response.data.message);
-                Swal.fire({
-                    title: 'Error',
-                    text: `Error al iniciar sesión`,
-                    icon: 'error'
-                });
-                //alert('Error: ' + response.data.message);
-            }
-        } catch (error) {
-            console.error('Error al intentar iniciar sesión:', error);
-            Swal.fire({
-                title: 'Error',
-                text: `Verifique sus credenciales`,
-                icon: 'error'
-            });
-            //alert('Error de red: no se pudo conectar al servidor.');
-        }
-    };
+          const termsResponse = await axios.get(`${URL}/auth/terms-status/`, {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          });
 
-    return (
-        <div className='container-l'>
-            <div className='login-container'>
-                <div className='image-container'>
-                    <img src={imagen} alt='Imagen' className='image' />
-                </div>
-                <div className='form-container-login'>
-                    <h1 className='title-login'>Inicio de sesión</h1>
-                    <center>
-                        {error && <p style={{ color: 'red' }}>{error}</p>} {/* Mostrar errores si existen */}
-                        <form onSubmit={handleSubmit}>
-                            <input
-                                type='text'
-                                name='username'
-                                placeholder='Username'
-                                value={formData.username}
-                                onChange={handleChange}
-                                className='input-field-login'
-                                required
-                            />
-                            <input
-                                type='password'
-                                name='password'
-                                placeholder='Contraseña'
-                                value={formData.password}
-                                onChange={handleChange}
-                                className='input-field-login'
-                                required
-                            />
-                            <button type='submit' className='submit-button-l'>
-                                Ingresar
-                            </button>
-                        </form> 
-                        <p className='forgot-password'>
-                            ¿Olvidaste tu contraseña?{' '}
-                            <Link to="/psw_reset" className='link-reset'>
-                                Haz clic aquí
-                            </Link>
-                        </p> 
-                    </center>
-                </div>
-            </div>
+          if (termsResponse.data.termsStatus === "accepted") {
+            navigate("/");
+          } else {
+            navigate("/terms");
+          }
+        } catch (error) {
+          console.error("Error al obtener el estado de los términos:", error);
+          Swal.fire({
+            title: "Error",
+            text: `Error al obtener el estado de los términos`,
+            icon: "error",
+          });
+        }
+      } else {
+        console.error("Error al iniciar sesión:", response.data.message);
+        Swal.fire({
+          title: "Error",
+          text: `Error al iniciar sesión`,
+          icon: "error",
+        });
+        //alert('Error: ' + response.data.message);
+      }
+    } catch (error) {
+      console.error("Error al intentar iniciar sesión:", error);
+      Swal.fire({
+        title: "Error",
+        text: `Verifique sus credenciales`,
+        icon: "error",
+      });
+      //alert('Error de red: no se pudo conectar al servidor.');
+    }
+  };
+
+  return (
+    <div className="container-l">
+      <div className="login-container">
+        <div className="image-container">
+          <img src={imagen} alt="Imagen" className="image" />
         </div>
-    );
+        <div className="form-container-login">
+          <h1 className="title-login">Inicio de sesión</h1>
+          <center>
+            {error && <p style={{ color: "red" }}>{error}</p>}{" "}
+            {/* Mostrar errores si existen */}
+            <form onSubmit={handleSubmit}>
+              <input
+                type="text"
+                name="username"
+                placeholder="Username"
+                value={formData.username}
+                onChange={handleChange}
+                className="input-field-login"
+                required
+              />
+              <input
+                type="password"
+                name="password"
+                placeholder="Contraseña"
+                value={formData.password}
+                onChange={handleChange}
+                className="input-field-login"
+                required
+              />
+              <button type="submit" className="submit-button-l">
+                Ingresar
+              </button>
+            </form>
+            <p className="forgot-password">
+              ¿Olvidaste tu contraseña?{" "}
+              <Link to="/psw_reset" className="link-reset">
+                Haz clic aquí
+              </Link>
+            </p>
+          </center>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default Login;

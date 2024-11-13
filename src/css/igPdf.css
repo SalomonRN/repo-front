@@ -1,0 +1,92 @@
+/* Contenedor principal */
+.social-post {
+  width: 100%;
+  max-width: 500px; /* El tamaño típico de una publicación de Instagram */
+  margin: 20px auto;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
+
+/* Cabecera de la publicación */
+.social-post .header {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.social-post .header .profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.social-post .header .username {
+  font-weight: bold;
+  font-size: 14px;
+  color: #333;
+}
+
+.social-post .header .location {
+  font-size: 12px;
+  color: #999;
+}
+
+/* Imagen de la publicación */
+.social-post .content {
+  width: 100%;
+  height: auto;
+}
+
+.social-post .content .post-image {
+  width: 100%;
+  border-top: 1px solid #f1f1f1;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+/* Pie de la publicación */
+.social-post .footer {
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #333;
+}
+
+.social-post .footer .likes,
+.social-post .footer .comments {
+  display: inline-flex;
+  align-items: center;
+}
+
+.social-post .footer .likes {
+  color: #ed4956; /* El color del corazón de Instagram */
+}
+
+.social-post .footer .comments {
+  color: #3897f0; /* Color del icono de comentarios en Instagram */
+}
+
+/* Estilos del botón */
+.ig-pdf-btn {
+  padding: 10px 20px;
+  background-color: #3897f0; /* Azul de Instagram */
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 20px;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  font-weight: bold;
+}
+
+.ig-pdf-btn:hover {
+  background-color: #3070b3; /* Sombra azul cuando el botón es presionado */
+}
