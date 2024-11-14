@@ -34,7 +34,8 @@ const ProposalsForms = () => {
     const socialMediaOptions = [
         { value: 'IG', label: 'Instagram' },
         { value: 'FB', label: 'Facebook' },
-        { value: 'YT', label: 'YouTube' }
+        { value: 'YT', label: 'YouTube' },
+        { value: 'TT', label: 'TikTok' }
     ];
 
     useEffect(() => {
