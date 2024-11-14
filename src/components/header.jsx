@@ -132,9 +132,9 @@ const Header = ({ toggleMenu, menuOpen }) => {
           <button className="opc" onClick={handleProposalsRedirect}>
             Propuestas
           </button>
-          <button className="opc" onClick={() => navigate("/proposals_form")}>
+          {/*<button className="opc" onClick={() => navigate("/proposals_form")}>
             Formulario de Propuestas
-          </button>
+          </button> */}
           <button className="opc" onClick={() => navigate("/calendar")}>
             Calendario
           </button>
